@@ -3,6 +3,12 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { createClient } from "@supabase/supabase-js"
 
+<<<<<<< HEAD
+export const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)
+=======
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -10,6 +16,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = (supabaseUrl && supabaseAnonKey) 
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
+>>>>>>> 467026641d03619e87de8a766a06027252b4d89e
 
 const AuthContext = createContext({
   user: null,
@@ -67,6 +74,7 @@ export function AuthProvider({ children }) {
     }
     document.cookie = "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
     setUser(null)
+    window.location.href = "/" // Redirect to login page
   }
 
   return (

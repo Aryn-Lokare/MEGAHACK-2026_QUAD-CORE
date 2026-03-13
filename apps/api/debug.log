@@ -1,0 +1,131 @@
+Log Initialized
+2026-03-13T19:53:06.663Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T19:59:44.838Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T19:59:44.993Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T19:59:50.693Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:02:23.323Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:02:33.306Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:02:33.331Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:02:35.871Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:06:00.146Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:07:23.665Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:07:23.683Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:07:24.748Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:07:24.764Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:07:25.969Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:07:25.985Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:08:22.263Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:08:22.294Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:08:25.813Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:08:25.836Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:08:33.560Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:08:33.579Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:08:41.241Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:08:41.256Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:17:52.922Z - AUTH: JWT Check - Algorithm: ES256, KID: 509d05d5-70eb-4600-8316-b73f1b82d188, Typ: JWT
+2026-03-13T20:17:52.922Z - AUTH: JWT Check - ISS: https://adwblfqtrlvixsjjvqil.supabase.co/auth/v1, Role: authenticated
+2026-03-13T20:17:52.929Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:17:52.931Z - AUTH: CRITICAL: Algorithm mismatch! Token has ES256 but we expect HS256
+2026-03-13T20:17:56.219Z - AUTH: JWT Check - Algorithm: ES256, KID: 509d05d5-70eb-4600-8316-b73f1b82d188, Typ: JWT
+2026-03-13T20:17:56.219Z - AUTH: JWT Check - ISS: https://adwblfqtrlvixsjjvqil.supabase.co/auth/v1, Role: authenticated
+2026-03-13T20:17:56.220Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:17:56.220Z - AUTH: CRITICAL: Algorithm mismatch! Token has ES256 but we expect HS256
+2026-03-13T20:27:15.600Z - AUTH: JWT Check - Algorithm: ES256, KID: 509d05d5-70eb-4600-8316-b73f1b82d188, Typ: JWT
+2026-03-13T20:27:15.602Z - AUTH: JWT Check - ISS: https://adwblfqtrlvixsjjvqil.supabase.co/auth/v1, Role: authenticated
+2026-03-13T20:27:15.610Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:27:15.615Z - AUTH: JWT Check - Algorithm: ES256, KID: 509d05d5-70eb-4600-8316-b73f1b82d188, Typ: JWT
+2026-03-13T20:27:15.618Z - AUTH: JWT Check - ISS: https://adwblfqtrlvixsjjvqil.supabase.co/auth/v1, Role: authenticated
+2026-03-13T20:27:15.619Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:28:55.166Z - AUTH: JWT Check - Algorithm: ES256, KID: 509d05d5-70eb-4600-8316-b73f1b82d188, Typ: JWT
+2026-03-13T20:28:55.167Z - AUTH: JWT Check - ISS: https://adwblfqtrlvixsjjvqil.supabase.co/auth/v1, Role: authenticated
+2026-03-13T20:28:55.169Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:28:55.204Z - AUTH: JWT Check - Algorithm: ES256, KID: 509d05d5-70eb-4600-8316-b73f1b82d188, Typ: JWT
+2026-03-13T20:28:55.205Z - AUTH: JWT Check - ISS: https://adwblfqtrlvixsjjvqil.supabase.co/auth/v1, Role: authenticated
+2026-03-13T20:28:55.205Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:28:56.320Z - AUTH: JWT Check - Algorithm: ES256, KID: 509d05d5-70eb-4600-8316-b73f1b82d188, Typ: JWT
+2026-03-13T20:28:56.321Z - AUTH: JWT Check - ISS: https://adwblfqtrlvixsjjvqil.supabase.co/auth/v1, Role: authenticated
+2026-03-13T20:28:56.322Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:28:56.333Z - AUTH: JWT Check - Algorithm: ES256, KID: 509d05d5-70eb-4600-8316-b73f1b82d188, Typ: JWT
+2026-03-13T20:28:56.333Z - AUTH: JWT Check - ISS: https://adwblfqtrlvixsjjvqil.supabase.co/auth/v1, Role: authenticated
+2026-03-13T20:28:56.334Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:28:59.729Z - AUTH: JWT Check - Algorithm: ES256, KID: 509d05d5-70eb-4600-8316-b73f1b82d188, Typ: JWT
+2026-03-13T20:28:59.730Z - AUTH: JWT Check - ISS: https://adwblfqtrlvixsjjvqil.supabase.co/auth/v1, Role: authenticated
+2026-03-13T20:28:59.730Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:32:38.654Z - AUTH: JWT Check - Algorithm: ES256, KID: 509d05d5-70eb-4600-8316-b73f1b82d188, Typ: JWT
+2026-03-13T20:32:38.655Z - AUTH: JWT Check - ISS: https://adwblfqtrlvixsjjvqil.supabase.co/auth/v1, Role: authenticated
+2026-03-13T20:32:38.657Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:32:38.670Z - AUTH: JWT Check - Algorithm: ES256, KID: 509d05d5-70eb-4600-8316-b73f1b82d188, Typ: JWT
+2026-03-13T20:32:38.671Z - AUTH: JWT Check - ISS: https://adwblfqtrlvixsjjvqil.supabase.co/auth/v1, Role: authenticated
+2026-03-13T20:32:38.672Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:37:46.001Z - AUTH: JWT Check - Algorithm: ES256, KID: 509d05d5-70eb-4600-8316-b73f1b82d188, Typ: JWT
+2026-03-13T20:37:46.002Z - AUTH: JWT Check - ISS: https://adwblfqtrlvixsjjvqil.supabase.co/auth/v1, Role: authenticated
+2026-03-13T20:37:46.010Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:37:46.013Z - AUTH: JWT Check - Algorithm: ES256, KID: 509d05d5-70eb-4600-8316-b73f1b82d188, Typ: JWT
+2026-03-13T20:37:46.015Z - AUTH: JWT Check - ISS: https://adwblfqtrlvixsjjvqil.supabase.co/auth/v1, Role: authenticated
+2026-03-13T20:37:46.017Z - AUTH: JWT verification failed for token eyJhbGciOi...: invalid algorithm
+2026-03-13T20:43:48.537Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:43:49.060Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:43:49.061Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-13T20:43:49.675Z - Found 7 pending users
+2026-03-13T20:43:53.502Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:43:53.615Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:43:53.653Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:43:53.654Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-13T20:43:53.840Z - Found 7 pending users
+2026-03-13T20:43:53.902Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:43:53.903Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-13T20:43:53.987Z - Found 7 pending users
+2026-03-13T20:44:05.914Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:44:05.969Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:44:07.387Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:44:07.462Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:44:08.344Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:44:08.396Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:44:09.044Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:44:09.102Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:44:09.565Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:44:09.657Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:44:10.134Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:44:10.190Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:44:10.645Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:44:10.690Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:45:54.352Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:45:54.643Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:45:54.644Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-13T20:45:54.722Z - Found 0 pending users
+2026-03-13T20:45:55.365Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:45:55.440Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:45:55.441Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-13T20:45:55.491Z - Found 0 pending users
+2026-03-13T20:45:57.966Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:45:58.034Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:45:58.299Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:45:58.336Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:46:03.949Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:46:04.015Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:46:06.168Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:46:06.237Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:46:06.238Z - GET /admin/users called by aryanlokare233@gmail.com
+2026-03-13T20:46:06.332Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:46:06.376Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:46:06.377Z - GET /admin/users called by aryanlokare233@gmail.com
+2026-03-13T20:46:08.265Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:46:08.329Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:46:08.346Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:46:08.347Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-13T20:46:08.388Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:46:08.389Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-13T20:46:08.423Z - Found 0 pending users
+2026-03-13T20:46:08.497Z - Found 0 pending users
+2026-03-13T20:46:10.104Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:46:10.229Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:46:10.330Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:46:10.479Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:46:12.730Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:46:12.847Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:46:13.113Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:46:13.213Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:46:53.260Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:46:53.314Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T20:46:53.495Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T20:46:53.544Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
