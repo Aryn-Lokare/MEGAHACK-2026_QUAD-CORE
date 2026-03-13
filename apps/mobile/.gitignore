@@ -1,0 +1,19 @@
+# Expo specific
+dist/
+web-build/
+expo-env.d.ts
+
+# Native specific
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# macOS specific
+*.pem
