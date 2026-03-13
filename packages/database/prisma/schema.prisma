@@ -8,12 +8,54 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+}
+
 enum Role {
   ADMIN
   FACULTY
   STUDENT
 }
 
+model Student {
+  id         String @id @default(uuid())
+  name       String
+  email      String @unique
+  department String
+  attendance Int
+}
+
+model Timetable {
+  id      String @id @default(uuid())
+  subject String
+  room    String
+  time    String
+  day     String
+}
+
+model Assignment {
+  id       String   @id @default(uuid())
+  subject  String
+  deadline DateTime
+}
+
+model CampusLocation {
+  id       String @id @default(uuid())
+  name     String
+  building String
+  floor    Int
+}
+
+model CampusKnowledge {
+  id      String @id @default(uuid())
+  title   String @unique
+  content String
+}
 model User {
   id        String   @id @default(uuid())
   email     String   @unique

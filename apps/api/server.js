@@ -1,9 +1,8 @@
+import 'dotenv/config';
 import express from "express"
 import cors from "cors"
 import prisma from "@repo/database"
-import adminRouter from "./src/routes/admin.js"
-import facultyRouter from "./src/routes/faculty.js"
-import studentRouter from "./src/routes/student.js"
+import aiRoutes from "./src/routes/ai.js"
 
 process.on("unhandledRejection", (reason, promise) => {
   console.error("Unhandled Rejection at:", promise, "reason:", reason);
@@ -17,6 +16,12 @@ process.on("uncaughtException", (err) => {
 const app = express()
 app.use(cors())
 app.use(express.json())
+
+app.get("/", (req, res) => {
+  res.send("<h1>🤖 Campus AI Assistant API is Running</h1><p>The backend is active and ready for requests.</p>");
+});
+
+app.use("/api/ai", aiRoutes)
 
 // Health check
 app.get("/", (req, res) => {
@@ -68,21 +73,20 @@ app.get("/users/me", async (req, res) => {
   res.json(user)
 })
 
-// Protected role-based routes
-app.use("/admin", adminRouter)
-app.use("/faculty", facultyRouter)
-app.use("/student", studentRouter)
+app.listen(5000, '0.0.0.0', (err) => {
+  if (err) {
+    console.error("Failed to start server:", err);
+    process.exit(1);
+  }
+  console.log("Server running on http://localhost:5000");
+});
 
-<<<<<<< HEAD
 const PORT = 5001
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
-=======
-app.listen(5000, () => {
-  console.log("Server running on port 5000")
->>>>>>> 625f70fd409a3b34b532b7d853d93b49ce57579b
 })
 
 server.on("error", (err) => {
   console.error("Server failed to start:", err);
 });
+
