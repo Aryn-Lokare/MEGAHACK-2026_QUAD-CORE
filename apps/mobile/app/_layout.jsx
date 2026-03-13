@@ -3,8 +3,8 @@ import { Stack, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { useEffect } from "react"
 import "react-native-reanimated"
-import { useColorScheme } from "@/hooks/use-color-scheme"
-import { AuthProvider, useAuth } from "@/context/AuthContext"
+import { useColorScheme } from "../hooks/use-color-scheme"
+import { AuthProvider, useAuth } from "../context/AuthContext"
 
 export const unstable_settings = {
   anchor: "(student)",
@@ -19,7 +19,7 @@ function RootNavigator() {
     if (loading) return
 
     if (!user) {
-      router.replace("/(student)")
+      router.replace("/modal")
       return
     }
 

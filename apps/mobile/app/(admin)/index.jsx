@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native"
-import { useAuth } from "@/context/AuthContext"
+import { useAuth } from "../../context/AuthContext"
 
 export default function AdminIndex() {
   const { user, signOut } = useAuth()

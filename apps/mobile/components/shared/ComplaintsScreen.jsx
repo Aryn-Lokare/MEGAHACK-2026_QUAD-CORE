@@ -12,10 +12,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 const { width } = Dimensions.get('window');
-const DEFAULT_AVATAR = require("@/assets/images/male_avtar/1.jpeg");
+const DEFAULT_AVATAR = require("../../assets/images/male_avtar/1.jpeg");
 
 export default function ComplaintsScreen() {
   const router = useRouter();

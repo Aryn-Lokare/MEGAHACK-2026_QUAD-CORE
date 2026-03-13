@@ -3,32 +3,32 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions } from '
 import { Stack, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 const { width } = Dimensions.get('window');
 const COLUMN_WIDTH = (width - 40) / 3;
 
 const MALE_AVATARS = [
-  require('@/assets/images/male_avtar/1.jpeg'),
-  require('@/assets/images/male_avtar/2.jpeg'),
-  require('@/assets/images/male_avtar/3.jpeg'),
-  require('@/assets/images/male_avtar/4.jpeg'),
-  require('@/assets/images/male_avtar/5.jpeg'),
-  require('@/assets/images/male_avtar/6.jpeg'),
-  require('@/assets/images/male_avtar/7.jpeg'),
-  require('@/assets/images/male_avtar/8.jpeg'),
-  require('@/assets/images/male_avtar/9.jpeg'),
+  require('../../assets/images/male_avtar/1.jpeg'),
+  require('../../assets/images/male_avtar/2.jpeg'),
+  require('../../assets/images/male_avtar/3.jpeg'),
+  require('../../assets/images/male_avtar/4.jpeg'),
+  require('../../assets/images/male_avtar/5.jpeg'),
+  require('../../assets/images/male_avtar/6.jpeg'),
+  require('../../assets/images/male_avtar/7.jpeg'),
+  require('../../assets/images/male_avtar/8.jpeg'),
+  require('../../assets/images/male_avtar/9.jpeg'),
 ];
 
 const FEMALE_AVATARS = [
-  require('@/assets/images/female_avtar/1.jpeg'),
-  require('@/assets/images/female_avtar/2.jpeg'),
-  require('@/assets/images/female_avtar/3.jpeg'),
-  require('@/assets/images/female_avtar/4.jpeg'),
-  require('@/assets/images/female_avtar/5.jpeg'),
-  require('@/assets/images/female_avtar/6.jpeg'),
-  require('@/assets/images/female_avtar/7.jpeg'),
-  require('@/assets/images/female_avtar/8.jpeg'),
+  require('../../assets/images/female_avtar/1.jpeg'),
+  require('../../assets/images/female_avtar/2.jpeg'),
+  require('../../assets/images/female_avtar/3.jpeg'),
+  require('../../assets/images/female_avtar/4.jpeg'),
+  require('../../assets/images/female_avtar/5.jpeg'),
+  require('../../assets/images/female_avtar/6.jpeg'),
+  require('../../assets/images/female_avtar/7.jpeg'),
+  require('../../assets/images/female_avtar/8.jpeg'),
 ];
 
 export default function AvatarPickerScreen() {

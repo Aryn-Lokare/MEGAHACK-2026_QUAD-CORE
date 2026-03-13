@@ -1,14 +1,14 @@
 import React, { useState, useRef } from "react"
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal, Animated, Pressable } from "react-native"
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal, Animated, Pressable, Alert } from "react-native"
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"
 import { useRouter, Stack } from "expo-router"
 import { Image } from "expo-image"
-import { useAuth } from "@/context/AuthContext"
+import { useAuth } from "../../context/AuthContext"
 
 const { width, height } = Dimensions.get("window")
 const SIDEBAR_WIDTH = width * 0.8
 
-const DEFAULT_AVATAR = require("@/assets/images/male_avtar/1.jpeg")
+const DEFAULT_AVATAR = require("../../assets/images/male_avtar/1.jpeg")
 
 export default function StudentHomeScreen() {
   const { user, signOut, avatar } = useAuth()
@@ -185,7 +185,18 @@ export default function StudentHomeScreen() {
                 color="#ef4444" 
                 onPress={() => {
                   toggleMenu(false)
-                  signOut()
+                  Alert.alert(
+                    "Confirm Logout",
+                    "Are you sure you want to log out?",
+                    [
+                      { text: "Cancel", style: "cancel" },
+                      { 
+                        text: "Logout", 
+                        style: "destructive", 
+                        onPress: () => signOut() 
+                      }
+                    ]
+                  )
                 }} 
               />
             </View>

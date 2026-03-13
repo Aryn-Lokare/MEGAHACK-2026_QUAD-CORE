@@ -12,9 +12,10 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Svg, { Circle, Path, Defs, RadialGradient, Stop } from 'react-native-svg';
-import { supabase } from '@/lib/supabase';
-import { useRole } from '@/hooks/useRole';
-import { BASE_URL } from '@/constants/api';
+import { supabase } from '../../lib/supabase';
+import { useRole } from '../../hooks/useRole';
+import { useAuth } from '../../context/AuthContext';
+import { BASE_URL } from '../../constants/api';
 
 const { height } = Dimensions.get('window');
 

@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColor } from '../../../hooks/use-theme-color';
 
 export default function StudentTabsLayout() {
   const tintColor = '#22c55e'; // Student green

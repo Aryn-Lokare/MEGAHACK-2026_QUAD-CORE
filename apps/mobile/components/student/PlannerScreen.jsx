@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 const { width } = Dimensions.get('window');
-const DEFAULT_AVATAR = require("@/assets/images/male_avtar/1.jpeg");
+const DEFAULT_AVATAR = require("../../assets/images/male_avtar/1.jpeg");
 
 export default function PlannerScreen() {
   const { user, avatar } = useAuth();

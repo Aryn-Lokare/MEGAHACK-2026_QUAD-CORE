@@ -18,7 +18,7 @@ const AuthContext = createContext({
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [avatar, setAvatarState] = useState(require("@/assets/images/male_avtar/1.jpeg"))
+  const [avatar, setAvatarState] = useState(require("../assets/images/male_avtar/1.jpeg"))
 
   useEffect(() => {
     // Load persisted avatar
