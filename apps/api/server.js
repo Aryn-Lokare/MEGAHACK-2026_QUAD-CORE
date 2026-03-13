@@ -17,16 +17,12 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+// Root: Health Check and Welcome
 app.get("/", (req, res) => {
   res.send("<h1>🤖 Campus AI Assistant API is Running</h1><p>The backend is active and ready for requests.</p>");
 });
 
 app.use("/api/ai", aiRoutes)
-
-// Health check
-app.get("/", (req, res) => {
-  res.json({ status: "Campus API running" })
-})
 
 // Check if an admin already exists
 app.get("/admin-exists", async (req, res) => {
@@ -73,20 +69,11 @@ app.get("/users/me", async (req, res) => {
   res.json(user)
 })
 
-app.listen(5000, '0.0.0.0', (err) => {
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, '0.0.0.0', (err) => {
   if (err) {
-    console.error("Failed to start server:", err);
+    console.error("Failed to start server on port", PORT, err);
     process.exit(1);
   }
-  console.log("Server running on http://localhost:5000");
+  console.log(`Server running on http://localhost:${PORT}`);
 });
-
-const PORT = 5001
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
-
-server.on("error", (err) => {
-  console.error("Server failed to start:", err);
-});
-
