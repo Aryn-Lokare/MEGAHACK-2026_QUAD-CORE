@@ -1,6 +1,15 @@
 import express from "express"
 import prisma from "@repo/database"
 
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+  process.exit(1);
+});
+
 const app = express()
 app.use(express.json())
 
@@ -23,6 +32,11 @@ app.get("/users", async (req, res) => {
   res.json(users)
 })
 
-app.listen(5000, () => {
-  console.log("Server running")
+const PORT = 5001
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
 })
+
+server.on("error", (err) => {
+  console.error("Server failed to start:", err);
+});
