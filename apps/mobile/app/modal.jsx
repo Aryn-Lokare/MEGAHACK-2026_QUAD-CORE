@@ -1,29 +1,14 @@
-import { Link } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
+import LoginScreen from '@/components/auth/LoginScreen';
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+export default function AuthModal() {
+  const router = useRouter();
 
-export default function ModalScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">This is a modal</ThemedText>
-      <Link href="/" dismissTo style={styles.link}>
-        <ThemedText type="link">Go to home screen</ThemedText>
-      </Link>
-    </ThemedView>
-  );
+  const handleLoginSuccess = (role) => {
+    // The RootNavigator in _layout.jsx handles role-based redirection,
+    // but we dismiss the modal here to let the redirect take effect.
+    router.dismiss();
+  };
+
+  return <LoginScreen onLoginSuccess={handleLoginSuccess} />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
-  },
-});

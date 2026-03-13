@@ -7,7 +7,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme"
 import { AuthProvider, useAuth } from "@/context/AuthContext"
 
 export const unstable_settings = {
-  anchor: "(tabs)",
+  anchor: "(student)",
 }
 
 function RootNavigator() {

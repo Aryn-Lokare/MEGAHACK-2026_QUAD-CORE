@@ -11,13 +11,6 @@ export default function FacultyLayout() {
           tabBarIcon: ({ color }) => <Ionicons name="home-outline" size={22} color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="students"
-        options={{
-          title: "Students",
-          tabBarIcon: ({ color }) => <Ionicons name="people-outline" size={22} color={color} />,
-        }}
-      />
     </Tabs>
   )
 }
