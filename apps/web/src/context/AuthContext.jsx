@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { createClient } from "@supabase/supabase-js"
 
-const supabase = createClient(
+export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
@@ -56,6 +56,7 @@ export function AuthProvider({ children }) {
     await supabase.auth.signOut()
     document.cookie = "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
     setUser(null)
+    window.location.href = "/" // Redirect to login page
   }
 
   return (

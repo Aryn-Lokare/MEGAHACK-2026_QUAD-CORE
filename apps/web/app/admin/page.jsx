@@ -1,12 +1,17 @@
 "use client"
 
-import { useAuth } from "@/src/context/AuthContext"
+import { useEffect } from "react"
+import { useAuth } from "../../src/context/AuthContext"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 export default function AdminDashboard() {
   const { signOut } = useAuth()
   const router = useRouter()
+
+  useEffect(() => {
+    router.replace("/admin/dashboard")
+  }, [router])
 
   return (
     <main className="min-h-screen bg-[#030712] text-white p-8">

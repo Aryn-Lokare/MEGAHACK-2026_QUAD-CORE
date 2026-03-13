@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@supabase/supabase-js"
-import { useAuth } from "@/src/context/AuthContext"
+import { useAuth } from "../src/context/AuthContext"
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -25,6 +25,18 @@ export default function Home() {
     if (!loading && user) {
       // Set role cookie for server-side proxy route protection
       document.cookie = `userRole=${user.role}; path=/; SameSite=Lax`
+      
+      // Handle approval workflow routing
+      if (user.role !== "ADMIN" && user.status === "PENDING") {
+        router.push("/pending")
+        return
+      }
+      
+      if (user.role !== "ADMIN" && user.status === "REJECTED") {
+        router.push("/rejected")
+        return
+      }
+
       if (user.role === "ADMIN") router.push("/admin")
       else if (user.role === "FACULTY") router.push("/faculty")
       else router.push("/student")
@@ -84,23 +96,23 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-[#030712] px-4 selection:bg-blue-500/30 overflow-hidden">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 selection:bg-blue-500/30 overflow-hidden">
       {/* Dynamic Background Glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className={`absolute top-[-10%] left-[-10%] w-[40%] h-[40%] ${roleConfigs[selectedRole].glow} blur-[120px] rounded-full transition-colors duration-1000`} />
-        <div className={`absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] ${roleConfigs[selectedRole].glow} blur-[120px] rounded-full transition-colors duration-1000`} />
+        <div className={`absolute top-[-10%] left-[-10%] w-[40%] h-[40%] ${roleConfigs[selectedRole].glow} blur-[120px] rounded-full transition-colors duration-1000 opacity-60`} />
+        <div className={`absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] ${roleConfigs[selectedRole].glow} blur-[120px] rounded-full transition-colors duration-1000 opacity-60`} />
       </div>
 
       <div className="w-full max-w-md space-y-8 z-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white mb-2">
-            Campus <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500">Nexus</span>
+          <h1 className="text-4xl font-extrabold tracking-tight text-black mb-2">
+            Campus <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Nexus</span>
           </h1>
-          <p className="text-gray-400 text-sm">Select your role and sign in</p>
+          <p className="text-slate-500 text-sm">Select your role and sign in</p>
         </div>
 
         {/* Role Selector */}
-        <div className="flex p-1 bg-gray-900/80 backdrop-blur-md rounded-2xl border border-white/5 shadow-2xl">
+        <div className="flex p-1 bg-white/80 backdrop-blur-md rounded-2xl border border-slate-200 shadow-xl">
           {(["ADMIN", "FACULTY", "STUDENT"]).map((role) => (
             <button
               key={role}
@@ -108,7 +120,7 @@ export default function Home() {
               className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all duration-300 ${
                 selectedRole === role 
                   ? `${roleConfigs[role].color} text-white shadow-lg` 
-                  : "text-gray-500 hover:text-gray-300"
+                  : "text-slate-500 hover:text-black"
               }`}
             >
               {role}
@@ -116,12 +128,12 @@ export default function Home() {
           ))}
         </div>
 
-        <div className={`bg-gray-900/40 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 shadow-2xl transition-all duration-500 ${roleConfigs[selectedRole].shadow} border-t-white/20`}>
+        <div className={`bg-white/60 backdrop-blur-2xl border border-slate-200 rounded-3xl p-8 shadow-2xl transition-all duration-500 ${roleConfigs[selectedRole].shadow} border-t-slate-100`}>
           <div className="mb-8">
-            <h2 className={`text-xl font-bold text-white transition-colors`}>
+            <h2 className={`text-xl font-bold text-black transition-colors`}>
               {roleConfigs[selectedRole].label} Login
             </h2>
-            <p className="text-gray-500 text-xs mt-1">Please enter your credentials below</p>
+            <p className="text-slate-500 text-xs mt-1">Please enter your credentials below</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
@@ -131,7 +143,7 @@ export default function Home() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="block w-full rounded-2xl bg-black/40 border border-white/5 px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-white/10 transition-all font-medium"
+                className="block w-full rounded-2xl bg-white border border-slate-200 px-4 py-3.5 text-black placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium shadow-sm"
                 placeholder="Email address"
               />
             </div>
@@ -142,7 +154,7 @@ export default function Home() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="block w-full rounded-2xl bg-black/40 border border-white/5 px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-white/10 transition-all font-medium"
+                className="block w-full rounded-2xl bg-white border border-slate-200 px-4 py-3.5 text-black placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium shadow-sm"
                 placeholder="Password"
               />
             </div>
@@ -166,17 +178,17 @@ export default function Home() {
             </button>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-white/5 text-center transition-all animate-in fade-in duration-1000 delay-500">
-            <p className="text-sm text-gray-500">
+          <div className="mt-8 pt-6 border-t border-slate-100 text-center transition-all animate-in fade-in duration-1000 delay-500">
+            <p className="text-sm text-slate-500">
               Don't have an account?{" "}
-              <Link href="/signup" className="text-blue-400 font-bold hover:underline decoration-blue-400/30 underline-offset-4">
+              <Link href="/signup" className="text-blue-600 font-bold hover:underline decoration-blue-600/30 underline-offset-4">
                 Sign Up
               </Link>
             </p>
           </div>
         </div>
 
-        <p className="text-center text-gray-600 text-[10px] uppercase tracking-widest font-bold">
+        <p className="text-center text-slate-400 text-[10px] uppercase tracking-widest font-bold">
           Authorized Access Only
         </p>
       </div>

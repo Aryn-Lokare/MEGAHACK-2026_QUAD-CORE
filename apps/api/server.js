@@ -4,6 +4,7 @@ import prisma from "@repo/database"
 import adminRouter from "./src/routes/admin.js"
 import facultyRouter from "./src/routes/faculty.js"
 import studentRouter from "./src/routes/student.js"
+import analyticsRouter from "./src/routes/analyticsRoutes.js"
 
 process.on("unhandledRejection", (reason, promise) => {
   console.error("Unhandled Rejection at:", promise, "reason:", reason);
@@ -17,6 +18,12 @@ process.on("uncaughtException", (err) => {
 const app = express()
 app.use(cors())
 app.use(express.json())
+
+// Request logger
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`)
+  next()
+})
 
 // Health check
 app.get("/", (req, res) => {
@@ -40,18 +47,30 @@ app.post("/users", async (req, res) => {
   try {
     const { email, name, role } = req.body
 
-    // Enforce single admin rule
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email }
+    })
+
+    if (existingUser) {
+      return res.status(409).json({ error: "An account with this email already exists." })
+    }
+
+    // Check if it's the very first admin to bypass approval
+    let initialStatus = "PENDING";
     if (role === "ADMIN") {
       const existingAdmin = await prisma.user.findFirst({
         where: { role: "ADMIN" }
       })
       if (existingAdmin) {
         return res.status(403).json({ error: "An administrator account already exists." })
+      } else {
+        initialStatus = "APPROVED"; // First admin is auto-approved
       }
     }
 
     const user = await prisma.user.create({
-      data: { email, name, role }
+      data: { email, name, role, status: initialStatus }
     })
     res.json(user)
   } catch (err) {
@@ -72,15 +91,20 @@ app.get("/users/me", async (req, res) => {
 app.use("/admin", adminRouter)
 app.use("/faculty", facultyRouter)
 app.use("/student", studentRouter)
+app.use("/analytics", analyticsRouter)
 
-<<<<<<< HEAD
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error("Global Error:", err);
+  res.status(err.status || 500).json({
+    error: err.message || "Internal Server Error",
+    stack: process.env.NODE_ENV === "development" ? err.stack : undefined
+  });
+});
+
 const PORT = 5001
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
-=======
-app.listen(5000, () => {
-  console.log("Server running on port 5000")
->>>>>>> 625f70fd409a3b34b532b7d853d93b49ce57579b
 })
 
 server.on("error", (err) => {

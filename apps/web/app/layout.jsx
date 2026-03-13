@@ -1,14 +1,14 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Open_Sans } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/src/context/AuthContext";
+import { AuthProvider } from "../src/context/AuthContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
   subsets: ["latin"],
 });
 
@@ -21,8 +21,8 @@ export default function RootLayout({
   children,
 }) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.variable} ${openSans.variable} antialiased`} suppressHydrationWarning>
         <AuthProvider>
           {children}
         </AuthProvider>
