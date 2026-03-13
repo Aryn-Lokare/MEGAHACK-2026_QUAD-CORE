@@ -1,40 +1,23 @@
-"use client"
-
 import { createContext, useContext, useEffect, useState } from "react"
 import { createClient } from "@supabase/supabase-js"
 
 const supabase = createClient(
-  process.env.EXPO_PUBLIC_SUPABASE_URL!,
-  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.EXPO_PUBLIC_SUPABASE_URL,
+  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY
 )
 
-type Role = "ADMIN" | "FACULTY" | "STUDENT"
-
-interface User {
-  id: string
-  email: string
-  name?: string
-  role: Role
-}
-
-interface AuthContextType {
-  user: User | null
-  loading: boolean
-  signOut: () => Promise<void>
-}
-
-const AuthContext = createContext<AuthContextType>({
+const AuthContext = createContext({
   user: null,
   loading: true,
   signOut: async () => {},
 })
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const resolveUser = async (session: any) => {
+    const resolveUser = async (session) => {
       if (!session) {
         setUser(null)
         setLoading(false)
