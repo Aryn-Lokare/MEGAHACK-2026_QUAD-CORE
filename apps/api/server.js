@@ -23,23 +23,54 @@ app.get("/", (req, res) => {
 
 app.use("/api/ai", aiRoutes)
 
-app.post("/users", async (req, res) => {
-  const { email, name, role } = req.body
-
-  const user = await prisma.user.create({
-    data: {
-      email,
-      name,
-      role
-    }
-  })
-
-  res.json(user)
+// Health check
+app.get("/", (req, res) => {
+  res.json({ status: "Campus API running" })
 })
 
-app.get("/users", async (req, res) => {
-  const users = await prisma.user.findMany()
-  res.json(users)
+// Check if an admin already exists
+app.get("/admin-exists", async (req, res) => {
+  try {
+    const admin = await prisma.user.findFirst({
+      where: { role: "ADMIN" }
+    })
+    res.json({ exists: !!admin })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// Public: create user (called after Supabase auth signup)
+app.post("/users", async (req, res) => {
+  try {
+    const { email, name, role } = req.body
+
+    // Enforce single admin rule
+    if (role === "ADMIN") {
+      const existingAdmin = await prisma.user.findFirst({
+        where: { role: "ADMIN" }
+      })
+      if (existingAdmin) {
+        return res.status(403).json({ error: "An administrator account already exists." })
+      }
+    }
+
+    const user = await prisma.user.create({
+      data: { email, name, role }
+    })
+    res.json(user)
+  } catch (err) {
+    res.status(400).json({ error: err.message })
+  }
+})
+
+// Public: get current user by email
+app.get("/users/me", async (req, res) => {
+  const { email } = req.query
+  if (!email) return res.status(400).json({ error: "email query param required" })
+  const user = await prisma.user.findUnique({ where: { email } })
+  if (!user) return res.status(404).json({ error: "User not found" })
+  res.json(user)
 })
 
 app.listen(5000, '0.0.0.0', (err) => {
@@ -48,5 +79,14 @@ app.listen(5000, '0.0.0.0', (err) => {
     process.exit(1);
   }
   console.log("Server running on http://localhost:5000");
+});
+
+const PORT = 5001
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
+
+server.on("error", (err) => {
+  console.error("Server failed to start:", err);
 });
 
