@@ -8,16 +8,126 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+<<<<<<< HEAD
+  createdAt DateTime   @default(now())
+  role      Role       @default(STUDENT)
+  status    UserStatus @default(PENDING)
+}
+
+model Course {
+  id         String   @id @default(uuid())
+  name       String
+  title      String?
+  department String
+  createdAt  DateTime @default(now())
+}
+
+model Activity {
+  id        String   @id @default(uuid())
+  type      String
+  userId    String
+  createdAt DateTime @default(now())
+}
+
+model Assignment {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  description String?
+  status      String
+  title       String
+  userId      String
+}
+
+model CampusKnowledge {
+  id      String @id
+  title   String @unique
+  content String
+}
+
+model CampusLocation {
+  id       String @id
+  name     String
+  building String
+  floor    Int
+}
+
+model Student {
+  id         String @id
+  name       String
+  email      String @unique
+  department String
+  attendance Int
+}
+
+model Timetable {
+  id      String @id
+  subject String
+  room    String
+  time    String
+  day     String
+}
+
+=======
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+}
+
+>>>>>>> 467026641d03619e87de8a766a06027252b4d89e
 enum Role {
   ADMIN
   FACULTY
   STUDENT
 }
 
+<<<<<<< HEAD
+enum UserStatus {
+  PENDING
+  APPROVED
+  REJECTED
+=======
+model Student {
+  id         String @id @default(uuid())
+  name       String
+  email      String @unique
+  department String
+  attendance Int
+}
+
+model Timetable {
+  id      String @id @default(uuid())
+  subject String
+  room    String
+  time    String
+  day     String
+}
+
+model Assignment {
+  id       String   @id @default(uuid())
+  subject  String
+  deadline DateTime
+}
+
+model CampusLocation {
+  id       String @id @default(uuid())
+  name     String
+  building String
+  floor    Int
+}
+
+model CampusKnowledge {
+  id      String @id @default(uuid())
+  title   String @unique
+  content String
+}
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   name      String?
   role      Role     @default(STUDENT)
   createdAt DateTime @default(now())
+>>>>>>> 467026641d03619e87de8a766a06027252b4d89e
 }

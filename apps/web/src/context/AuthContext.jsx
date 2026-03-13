@@ -3,10 +3,20 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { createClient } from "@supabase/supabase-js"
 
-const supabase = createClient(
+<<<<<<< HEAD
+export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
+=======
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+// Check if variables exist to avoid client-side crash
+const supabase = (supabaseUrl && supabaseAnonKey) 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null;
+>>>>>>> 467026641d03619e87de8a766a06027252b4d89e
 
 const AuthContext = createContext({
   user: null,
@@ -19,6 +29,11 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     const resolveUser = async (session) => {
       if (!session) {
         setUser(null)
@@ -27,8 +42,9 @@ export function AuthProvider({ children }) {
       }
 
       try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/ai';
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/users/me?email=${session.user.email}`
+          `${apiUrl}/users/me?email=${session.user.email}`
         )
         if (res.ok) {
           const data = await res.json()
@@ -53,9 +69,12 @@ export function AuthProvider({ children }) {
   }, [])
 
   const signOut = async () => {
-    await supabase.auth.signOut()
+    if (supabase) {
+      await supabase.auth.signOut()
+    }
     document.cookie = "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
     setUser(null)
+    window.location.href = "/" // Redirect to login page
   }
 
   return (
