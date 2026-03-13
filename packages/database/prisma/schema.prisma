@@ -8,15 +8,16 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  role      String
-  createdAt DateTime @default(now())
-}
 enum Role {
   ADMIN
   FACULTY
   STUDENT
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
 }
