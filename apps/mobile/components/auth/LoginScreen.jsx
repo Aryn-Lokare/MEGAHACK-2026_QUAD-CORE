@@ -13,12 +13,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Svg, { Circle, Path, Defs, RadialGradient, Stop } from 'react-native-svg';
 import { supabase } from '@/lib/supabase';
-import { useRole } from '@/hooks/useRole';
-import { BASE_URL } from '@/constants/api';
 
 const { height } = Dimensions.get('window');
 
-const LoginScreen = ({ onLoginSuccess }) => {
+const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -35,37 +33,17 @@ const LoginScreen = ({ onLoginSuccess }) => {
     setError(null);
 
     try {
-      // 1. Supabase Sign In
-      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      // Sign in via Supabase. AuthContext listens to the SIGNED_IN event,
+      // fetches the role from the backend, and _layout.jsx handles navigation.
+      const { error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (authError) throw authError;
-
-      const token = authData.session.access_token;
-
-      // 2. Fetch User Data/Role from Backend
-      const res = await fetch(`${BASE_URL}/student/dashboard`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) throw new Error('Failed to verify role');
-
-      // The AuthContext useEffect will catch the session change and update 'user' state,
-      // but the prompt asks us to extract the role and call onLoginSuccess.
-      // We'll fetch the role specifically if needed, or rely on the backend response.
-      const userData = await res.json();
-      const role = userData.role || 'STUDENT';
-
-      if (onLoginSuccess) {
-        onLoginSuccess(role);
-      }
     } catch (err) {
-      console.error(err);
-      setError('Invalid email or password');
+      console.error('[LoginScreen] Error:', err.message);
+      setError(err.message || 'Invalid email or password');
     } finally {
       setLoading(false);
     }
@@ -87,7 +65,7 @@ const LoginScreen = ({ onLoginSuccess }) => {
             <Circle cx="20" cy="30" r="15" fill="url(#glow)" />
             <Circle cx="80" cy="40" r="15" fill="url(#glow)" />
             <Circle cx="50" cy="70" r="15" fill="url(#glow)" />
-            
+
             {/* Lines */}
             <Path
               d="M20 30 L80 40 M80 40 L50 70 M50 70 L20 30"
@@ -95,7 +73,7 @@ const LoginScreen = ({ onLoginSuccess }) => {
               strokeWidth="0.5"
               strokeOpacity="0.4"
             />
-            
+
             {/* Nodes */}
             <Circle cx="20" cy="30" r="3" fill="#1418eb" />
             <Circle cx="80" cy="40" r="3" fill="#1418eb" />

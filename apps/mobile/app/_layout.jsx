@@ -1,49 +1,49 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native"
-import { Stack, useRouter } from "expo-router"
+import { Stack, useRouter, useSegments } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { useEffect } from "react"
 import "react-native-reanimated"
 import { useColorScheme } from "@/hooks/use-color-scheme"
 import { AuthProvider, useAuth } from "@/context/AuthContext"
 
-export const unstable_settings = {
-  anchor: "(student)",
-}
-
 function RootNavigator() {
   const { user, loading } = useAuth()
   const router = useRouter()
+  const segments = useSegments()
   const colorScheme = useColorScheme()
 
   useEffect(() => {
     if (loading) return
 
-    if (!user) {
-      router.replace("/modal") // login screen
-      return
-    }
+    const inAuthGroup =
+      segments[0] === "(admin)" ||
+      segments[0] === "(faculty)" ||
+      segments[0] === "(student)"
 
-    switch (user.role) {
-      case "ADMIN":
+    if (!user && inAuthGroup) {
+      // Logged out — defer redirect so Expo Router has finished its current render cycle
+      console.log("[RootNavigator] No session, redirecting to login.")
+      setTimeout(() => router.replace("/"), 0)
+    } else if (user && !inAuthGroup) {
+      // Logged in — navigate to correct dashboard
+      console.log("[RootNavigator] Session active, navigating to dashboard:", user.role)
+      if (user.role === "ADMIN") {
         router.replace("/(admin)")
-        break
-      case "FACULTY":
+      } else if (user.role === "FACULTY") {
         router.replace("/(faculty)")
-        break
-      case "STUDENT":
-      default:
+      } else {
         router.replace("/(student)")
+      }
     }
   }, [user, loading])
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(admin)" options={{ headerShown: false }} />
         <Stack.Screen name="(faculty)" options={{ headerShown: false }} />
         <Stack.Screen name="(student)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal", title: "Login" }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

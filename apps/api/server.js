@@ -4,6 +4,7 @@ import prisma from "@repo/database"
 import adminRouter from "./src/routes/admin.js"
 import facultyRouter from "./src/routes/faculty.js"
 import studentRouter from "./src/routes/student.js"
+import authRouter from "./src/routes/auth.js"
 
 process.on("unhandledRejection", (reason, promise) => {
   console.error("Unhandled Rejection at:", promise, "reason:", reason);
@@ -72,15 +73,11 @@ app.get("/users/me", async (req, res) => {
 app.use("/admin", adminRouter)
 app.use("/faculty", facultyRouter)
 app.use("/student", studentRouter)
+app.use("/auth", authRouter)
 
-<<<<<<< HEAD
 const PORT = 5001
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-=======
-app.listen(5000, () => {
-  console.log("Server running on port 5000")
->>>>>>> 625f70fd409a3b34b532b7d853d93b49ce57579b
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT} (all interfaces)`)
 })
 
 server.on("error", (err) => {

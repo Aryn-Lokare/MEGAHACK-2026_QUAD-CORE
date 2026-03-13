@@ -1,16 +1,7 @@
-import { Redirect } from 'expo-router';
-import { useAuth } from '@/context/AuthContext';
+import LoginScreen from '@/components/auth/LoginScreen';
 
-export default function IndexRedirect() {
-  const { user, loading } = useAuth();
-
-  if (loading) return null;
-
-  if (user) {
-    if (user.role === 'ADMIN') return <Redirect href="/(admin)" />;
-    if (user.role === 'FACULTY') return <Redirect href="/(faculty)" />;
-    return <Redirect href="/(student)" />;
-  }
-
-  return <Redirect href="/modal" />; // Redirect to login modal if not authenticated
+// This is the public entry point — it only shows the login screen.
+// Navigation after login/logout is handled entirely by _layout.jsx (RootNavigator).
+export default function Index() {
+  return <LoginScreen />;
 }
