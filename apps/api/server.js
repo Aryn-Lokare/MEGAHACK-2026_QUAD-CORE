@@ -1,5 +1,5 @@
 import express from "express"
-import prisma from "./src/lib/prisma.js"
+import prisma from "@repo/database"
 
 const app = express()
 app.use(express.json())
@@ -26,4 +26,3 @@ app.get("/users", async (req, res) => {
 app.listen(5000, () => {
   console.log("Server running")
 })
-
