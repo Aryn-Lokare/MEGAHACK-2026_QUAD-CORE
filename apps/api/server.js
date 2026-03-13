@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from "express"
 import cors from "cors"
 import prisma from "@repo/database"
@@ -5,6 +6,7 @@ import adminRouter from "./src/routes/admin.js"
 import facultyRouter from "./src/routes/faculty.js"
 import studentRouter from "./src/routes/student.js"
 import analyticsRouter from "./src/routes/analyticsRoutes.js"
+import aiRoutes from "./src/routes/ai.js"
 
 process.on("unhandledRejection", (reason, promise) => {
   console.error("Unhandled Rejection at:", promise, "reason:", reason);
@@ -25,10 +27,12 @@ app.use((req, res, next) => {
   next()
 })
 
-// Health check
+// Root: Health Check and Welcome
 app.get("/", (req, res) => {
-  res.json({ status: "Campus API running" })
-})
+  res.send("<h1>🤖 Campus AI Assistant API is Running</h1><p>The backend is active and ready for requests.</p>");
+});
+
+app.use("/api/ai", aiRoutes)
 
 // Check if an admin already exists
 app.get("/admin-exists", async (req, res) => {
@@ -109,4 +113,5 @@ const server = app.listen(PORT, () => {
 
 server.on("error", (err) => {
   console.error("Server failed to start:", err);
+  process.exit(1);
 });
