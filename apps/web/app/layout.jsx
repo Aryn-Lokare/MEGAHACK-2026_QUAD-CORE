@@ -1,6 +1,7 @@
 import { Inter, Open_Sans } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "../src/context/AuthContext";
+import AIStickyButton from "../components/AIStickyButton";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
       <body className={`${inter.variable} ${openSans.variable} antialiased`} suppressHydrationWarning>
         <AuthProvider>
           {children}
+          <AIStickyButton />
         </AuthProvider>
       </body>
     </html>

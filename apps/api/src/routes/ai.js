@@ -13,6 +13,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 config({ path: resolve(__dirname, '../../.env') });
 config({ path: resolve(__dirname, '../../../../packages/database/.env') });
 
+import { auth } from '../middleware/auth.js';
+
 const router = express.Router();
 
 // Handle file uploads in memory
@@ -38,8 +40,16 @@ function chunkText(text, maxLen = 1500) {
   return chunks;
 }
 
-// POST /api/ai/knowledge/upload - upload and parse a PDF
-router.post('/knowledge/upload', upload.single('file'), async (req, res) => {
+// Helper to check for staff roles
+const isStaff = (req, res, next) => {
+  if (req.user.role === 'STUDENT') {
+    return res.status(403).json({ error: 'Forbidden: Students cannot manage knowledge base' });
+  }
+  next();
+};
+
+// POST /api/ai/knowledge/upload - upload and parse a PDF (Protected: Admin/Faculty Only)
+router.post('/knowledge/upload', auth, isStaff, upload.single('file'), async (req, res) => {
   try {
     console.log('--- Incoming PDF Upload ---');
     if (!req.file) {
@@ -138,8 +148,8 @@ Student Question: ${query}`;
   }
 });
 
-// GET /api/ai/knowledge - fetch all knowledge entries
-router.get('/knowledge', async (req, res) => {
+// GET /api/ai/knowledge - fetch all knowledge entries (Protected: Admin/Faculty Only)
+router.get('/knowledge', auth, isStaff, async (req, res) => {
   try {
     const entries = await prisma.campusKnowledge.findMany({
       orderBy: { title: 'asc' }
@@ -150,8 +160,8 @@ router.get('/knowledge', async (req, res) => {
   }
 });
 
-// POST /api/ai/knowledge - add a new knowledge entry
-router.post('/knowledge', async (req, res) => {
+// POST /api/ai/knowledge - add a new knowledge entry (Protected: Admin/Faculty Only)
+router.post('/knowledge', auth, isStaff, async (req, res) => {
   try {
     const { title, content } = req.body;
     if (!title || !content) {
@@ -166,8 +176,8 @@ router.post('/knowledge', async (req, res) => {
   }
 });
 
-// DELETE /api/ai/knowledge/:id - delete a knowledge entry
-router.delete('/knowledge/:id', async (req, res) => {
+// DELETE /api/ai/knowledge/:id - delete a knowledge entry (Protected: Admin/Faculty Only)
+router.delete('/knowledge/:id', auth, isStaff, async (req, res) => {
   try {
     await prisma.campusKnowledge.delete({ where: { id: req.params.id } });
     res.json({ success: true });

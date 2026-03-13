@@ -1,10 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useAuth, supabase } from '../../../src/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 const API = 'http://localhost:5000/api/ai';
 
 export default function KnowledgeAdmin() {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [entries, setEntries] = useState([]);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -12,10 +16,34 @@ export default function KnowledgeAdmin() {
   const [status, setStatus] = useState('');
   const [fetching, setFetching] = useState(true);
 
+  // Protection logic: Redirect students or unauthenticated users
+  useEffect(() => {
+    if (!authLoading) {
+      if (!user) {
+        router.replace('/');
+      } else if (user.role === 'STUDENT') {
+        router.replace('/AICampusAssistant');
+      }
+    }
+  }, [user, authLoading, router]);
+
+  const getDashboardLink = () => {
+    if (!user) return '/';
+    if (user.role === 'ADMIN') return '/admin/dashboard';
+    if (user.role === 'FACULTY') return '/faculty';
+    if (user.role === 'STUDENT') return '/student';
+    return '/';
+  };
+
   const fetchEntries = async () => {
     setFetching(true);
     try {
-      const res = await fetch(`${API}/knowledge`);
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(`${API}/knowledge`, {
+        headers: {
+          'Authorization': session ? `Bearer ${session.access_token}` : ''
+        }
+      });
       const data = await res.json();
       setEntries(data.entries || []);
     } catch {
@@ -25,7 +53,9 @@ export default function KnowledgeAdmin() {
     }
   };
 
-  useEffect(() => { fetchEntries(); }, []);
+  useEffect(() => { 
+    if (user && user.role !== 'STUDENT') fetchEntries(); 
+  }, [user]);
 
   const addEntry = async (e) => {
     e.preventDefault();
@@ -33,9 +63,13 @@ export default function KnowledgeAdmin() {
     setLoading(true);
     setStatus('');
     try {
+      const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch(`${API}/knowledge`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': session ? `Bearer ${session.access_token}` : ''
+        },
         body: JSON.stringify({ title: title.trim(), content: content.trim() }),
       });
       const data = await res.json();
@@ -57,7 +91,13 @@ export default function KnowledgeAdmin() {
   const deleteEntry = async (id, entryTitle) => {
     if (!confirm(`Delete "${entryTitle}"?`)) return;
     try {
-      await fetch(`${API}/knowledge/${id}`, { method: 'DELETE' });
+      const { data: { session } } = await supabase.auth.getSession();
+      await fetch(`${API}/knowledge/${id}`, { 
+        method: 'DELETE',
+        headers: {
+          'Authorization': session ? `Bearer ${session.access_token}` : ''
+        }
+      });
       setEntries(prev => prev.filter(e => e.id !== id));
       setStatus(`🗑️ Deleted: "${entryTitle}"`);
     } catch {
@@ -80,8 +120,12 @@ export default function KnowledgeAdmin() {
     if (prefixInput.value) formData.append('titlePrefix', prefixInput.value);
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch(`${API}/knowledge/upload`, {
         method: 'POST',
+        headers: {
+          'Authorization': session ? `Bearer ${session.access_token}` : ''
+        },
         body: formData,
       });
       const data = await res.json();
@@ -100,6 +144,14 @@ export default function KnowledgeAdmin() {
     }
   };
 
+  if (authLoading || (user && user.role === 'STUDENT')) {
+    return (
+      <div style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center', background: '#F8FAFC' }}>
+        <p style={{ color: '#64748B' }}>Checking permissions...</p>
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: '100vh', background: '#F8FAFC', fontFamily: 'system-ui, sans-serif' }}>
       {/* Header */}
@@ -113,11 +165,16 @@ export default function KnowledgeAdmin() {
           <h1 style={{ color: '#F1F5F9', fontWeight: 600, fontSize: '15px', margin: 0 }}>Knowledge Base Manager</h1>
           <p style={{ color: '#64748B', fontSize: '12px', margin: 0 }}>Add, view, and delete RAG knowledge entries</p>
         </div>
-        <a href="/AICampusAssistant" style={{ marginLeft: 'auto', fontSize: '13px', color: '#818CF8', textDecoration: 'none', padding: '6px 14px', border: '1px solid #4338CA', borderRadius: '8px' }}>
-          ← Back to Chat
-        </a>
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <a href={getDashboardLink()} style={{ fontSize: '13px', color: '#F1F5F9', textDecoration: 'none', padding: '6px 14px', border: '1px solid #334155', borderRadius: '8px' }}>
+            ← Dashboard
+          </a>
+          <a href="/AICampusAssistant" style={{ fontSize: '13px', color: '#818CF8', textDecoration: 'none', padding: '6px 14px', border: '1px solid #4338CA', borderRadius: '8px' }}>
+            ← Back to Chat
+          </a>
+        </div>
       </header>
-
+      {/* ... rest of the UI ... */}
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '32px 24px' }}>
 
         {/* Add Entry Form */}

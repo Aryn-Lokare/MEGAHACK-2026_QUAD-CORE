@@ -1,29 +1,33 @@
-<<<<<<< HEAD
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@supabase/supabase-js"
 import { useAuth } from "../src/context/AuthContext"
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+const supabase = (supabaseUrl && supabaseAnonKey)
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null;
 
 export default function Home() {
   const { user, loading } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const stay = searchParams.get("stay")
+  
   const [selectedRole, setSelectedRole] = useState("STUDENT")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [authLoading, setAuthLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  // Redirect if already logged in
+  // Redirect if already logged in, UNLESS "stay" param is present
   useEffect(() => {
-    if (!loading && user) {
+    if (!loading && user && !stay) {
       // Set role cookie for server-side proxy route protection
       document.cookie = `userRole=${user.role}; path=/; SameSite=Lax`
       
@@ -38,14 +42,18 @@ export default function Home() {
         return
       }
 
-      if (user.role === "ADMIN") router.push("/admin")
+      if (user.role === "ADMIN") router.push("/admin/dashboard")
       else if (user.role === "FACULTY") router.push("/faculty")
       else router.push("/student")
     }
-  }, [user, loading, router])
+  }, [user, loading, router, stay])
 
   const handleLogin = async (e) => {
     e.preventDefault()
+    if (!supabase) {
+      setError("Supabase not configured")
+      return
+    }
     setAuthLoading(true)
     setError(null)
 
@@ -97,7 +105,7 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 selection:bg-blue-500/30 overflow-hidden">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 selection:bg-blue-500/30 overflow-hidden relative">
       {/* Dynamic Background Glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className={`absolute top-[-10%] left-[-10%] w-[40%] h-[40%] ${roleConfigs[selectedRole].glow} blur-[120px] rounded-full transition-colors duration-1000 opacity-60`} />
@@ -179,6 +187,22 @@ export default function Home() {
             </button>
           </form>
 
+          {user && (
+            <div className="mt-4 p-3 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 text-xs text-center">
+              Currently logged in as <strong>{user.email}</strong>. 
+              <button 
+                onClick={() => {
+                  document.cookie = "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+                  supabase.auth.signOut()
+                  window.location.reload()
+                }}
+                className="ml-2 underline font-bold"
+              >
+                Logout
+              </button>
+            </div>
+          )}
+
           <div className="mt-8 pt-6 border-t border-slate-100 text-center transition-all animate-in fade-in duration-1000 delay-500">
             <p className="text-sm text-slate-500">
               Don't have an account?{" "}
@@ -195,70 +219,4 @@ export default function Home() {
       </div>
     </main>
   )
-=======
-import Image from "next/image";
-
-export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
->>>>>>> 467026641d03619e87de8a766a06027252b4d89e
 }

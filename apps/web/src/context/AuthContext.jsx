@@ -3,20 +3,13 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { createClient } from "@supabase/supabase-js"
 
-<<<<<<< HEAD
-export const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-)
-=======
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 // Check if variables exist to avoid client-side crash
-const supabase = (supabaseUrl && supabaseAnonKey) 
+export const supabase = (supabaseUrl && supabaseAnonKey) 
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
->>>>>>> 467026641d03619e87de8a766a06027252b4d89e
 
 const AuthContext = createContext({
   user: null,
@@ -42,7 +35,9 @@ export function AuthProvider({ children }) {
       }
 
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/ai';
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+        // Note: Changed from /api/ai to /api to be more generic if needed, 
+        // but ensuring it points to the right place for user lookup.
         const res = await fetch(
           `${apiUrl}/users/me?email=${session.user.email}`
         )
