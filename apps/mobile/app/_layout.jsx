@@ -19,7 +19,7 @@ function RootNavigator() {
     if (loading) return
 
     if (!user) {
-      router.replace("/modal") // login screen
+      router.replace("/(student)")
       return
     }
 
@@ -39,7 +39,6 @@ function RootNavigator() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(admin)" options={{ headerShown: false }} />
         <Stack.Screen name="(faculty)" options={{ headerShown: false }} />
         <Stack.Screen name="(student)" options={{ headerShown: false }} />

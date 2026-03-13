@@ -73,14 +73,9 @@ app.use("/admin", adminRouter)
 app.use("/faculty", facultyRouter)
 app.use("/student", studentRouter)
 
-<<<<<<< HEAD
 const PORT = 5001
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
-=======
-app.listen(5000, () => {
-  console.log("Server running on port 5000")
->>>>>>> 625f70fd409a3b34b532b7d853d93b49ce57579b
 })
 
 server.on("error", (err) => {

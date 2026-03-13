@@ -5,9 +5,9 @@ export default function AuthModal() {
   const router = useRouter();
 
   const handleLoginSuccess = (role) => {
-    // The RootNavigator in _layout.jsx handles role-based redirection,
-    // but we dismiss the modal here to let the redirect take effect.
-    router.dismiss();
+    if (role === 'ADMIN') router.replace('/(admin)');
+    else if (role === 'FACULTY') router.replace('/(faculty)');
+    else router.replace('/(student)');
   };
 
   return <LoginScreen onLoginSuccess={handleLoginSuccess} />;

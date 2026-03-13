@@ -19,11 +19,19 @@ import { BASE_URL } from '@/constants/api';
 const { height } = Dimensions.get('window');
 
 const LoginScreen = ({ onLoginSuccess }) => {
+  const { guestLogin } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleGuestAccess = () => {
+    guestLogin('STUDENT');
+    if (onLoginSuccess) {
+      onLoginSuccess('STUDENT');
+    }
+  };
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -165,6 +173,13 @@ const LoginScreen = ({ onLoginSuccess }) => {
         </TouchableOpacity>
 
         {error && <Text style={styles.errorText}>{error}</Text>}
+
+        <TouchableOpacity 
+          style={styles.studentLinkContainer} 
+          onPress={handleGuestAccess}
+        >
+          <Text style={styles.studentLinkText}>Go to Student Home Page →</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Bottom Section */}
@@ -259,11 +274,22 @@ const styles = StyleSheet.create({
     marginTop: 32,
     alignItems: 'center',
   },
+  studentLinkContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+    padding: 10,
+  },
+  studentLinkText: {
+    color: '#22c55e',
+    fontSize: 14,
+    fontWeight: '600',
+    textDecorationLine: 'underline',
+  },
   footerText: {
     fontSize: 11,
     color: '#4d6280',
     letterSpacing: 1,
   },
-});
+})
 
 export default LoginScreen;
