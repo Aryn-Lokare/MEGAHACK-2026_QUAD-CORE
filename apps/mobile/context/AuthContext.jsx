@@ -1,18 +1,35 @@
 import { createContext, useContext, useEffect, useState } from "react"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { BASE_URL } from "@/constants/api"
 import { supabase } from "@/lib/supabase"
 
 const AuthContext = createContext({
   user: null,
   loading: true,
+  avatar: null,
+  setAvatar: async () => { },
   signOut: async () => { },
 })
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [avatar, setAvatarState] = useState(require("../assets/images/male_avtar/1.jpeg"))
 
   useEffect(() => {
+    // Load persisted avatar from storage
+    const loadAvatar = async () => {
+      try {
+        const savedAvatar = await AsyncStorage.getItem("user_avatar")
+        if (savedAvatar) {
+          setAvatarState(JSON.parse(savedAvatar))
+        }
+      } catch (e) {
+        console.warn("[AuthContext] AsyncStorage not available:", e.message)
+      }
+    }
+    loadAvatar()
+
     const resolveUser = async (session) => {
       setLoading(true)
       if (!session) {
@@ -57,12 +74,21 @@ export function AuthProvider({ children }) {
     return () => listener.subscription.unsubscribe()
   }, [])
 
+  const setAvatar = async (uri) => {
+    setAvatarState(uri) // Update UI immediately
+    try {
+      await AsyncStorage.setItem("user_avatar", JSON.stringify(uri))
+    } catch (e) {
+      console.warn("[AuthContext] Could not persist avatar:", e.message)
+    }
+  }
+
   const signOut = async () => {
     await supabase.auth.signOut()
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signOut }}>
+    <AuthContext.Provider value={{ user, loading, avatar, setAvatar, signOut }}>
       {children}
     </AuthContext.Provider>
   )

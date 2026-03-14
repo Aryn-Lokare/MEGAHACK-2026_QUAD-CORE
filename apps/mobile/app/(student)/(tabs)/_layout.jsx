@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useThemeColor } from '@/hooks/use-theme-color';
 
 export default function StudentTabsLayout() {
   const tintColor = '#22c55e'; // Student green
@@ -38,8 +37,9 @@ export default function StudentTabsLayout() {
       <Tabs.Screen
         name="complaints"
         options={{
-          title: 'Support',
-          tabBarIcon: ({ color }) => <Ionicons name="help-circle-outline" size={24} color={color} />,
+          title: 'Complaints',
+          headerTitle: 'Support & Tickets',
+          tabBarIcon: ({ color }) => <Ionicons name="alert-circle-outline" size={24} color={color} />,
         }}
       />
     </Tabs>
