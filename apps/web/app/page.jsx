@@ -43,7 +43,7 @@ export default function Home() {
       }
 
       if (user.role === "ADMIN") router.push("/admin/dashboard")
-      else if (user.role === "FACULTY") router.push("/faculty/dashboard")
+      else if (user.role === "FACULTY") router.push("/faculty")
       else router.push("/student")
     }
   }, [user, loading, router, stay])

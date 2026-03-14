@@ -63,6 +63,20 @@ export default function StudentDashboard() {
               View Grades <span className="ml-1">→</span>
             </Link>
           </div>
+
+          {/* AI Study Planner Card */}
+          <div className="bg-gray-900/40 backdrop-blur-xl rounded-3xl p-8 border border-white/5 hover:border-white/10 transition-all group md:col-span-2">
+            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <svg className="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h2 className="text-xl font-bold mb-2">AI Study Planner</h2>
+            <p className="text-gray-400 text-sm mb-6">Generate personalized study schedules using advanced AI to optimize your learning path.</p>
+            <Link href="/student/AIStudyPlanner" className="inline-flex items-center text-indigo-400 font-bold hover:gap-2 transition-all">
+              Launch AI Planner <span className="ml-1">→</span>
+            </Link>
+          </div>
         </div>
       </div>
     </main>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { Users, UserPlus, BookOpen, Activity, RefreshCcw } from 'lucide-react';
 import { StatCard } from '../../../components/dashboard/StatCard';
 import { UserAnalyticsChart } from '../../../components/dashboard/UserAnalyticsChart';
@@ -75,10 +76,16 @@ export default function AdminDashboardPage() {
             <h1 className="text-3xl font-extrabold text-black tracking-tight">Campus Analytics</h1>
             <p className="text-slate-500 mt-1 font-bold text-xs uppercase tracking-widest opacity-80">Overview of key metrics</p>
           </div>
-          <button onClick={fetchData} className="flex items-center gap-2 px-6 py-2.5 bg-[#0F62FE] hover:bg-blue-600 text-white rounded-xl shadow-lg shadow-blue-900/50 transition-all font-bold text-xs uppercase tracking-wider cursor-pointer">
-            <RefreshCcw size={16} />
-            <span>Refresh Data</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <Link href="/student/AIStudyPlanner" className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg shadow-indigo-900/50 transition-all font-bold text-xs uppercase tracking-wider cursor-pointer">
+              <BookOpen size={16} />
+              <span>Launch AI Planner</span>
+            </Link>
+            <button onClick={fetchData} className="flex items-center gap-2 px-6 py-2.5 bg-[#0F62FE] hover:bg-blue-600 text-white rounded-xl shadow-lg shadow-blue-900/50 transition-all font-bold text-xs uppercase tracking-wider cursor-pointer">
+              <RefreshCcw size={16} />
+              <span>Refresh Data</span>
+            </button>
+          </div>
         </div>
 
         <div className="space-y-8">

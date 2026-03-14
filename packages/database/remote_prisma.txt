@@ -1,4 +1,4 @@
-generator client {
+﻿generator client {
   provider = "prisma-client-js"
 }
 
@@ -100,25 +100,6 @@ model Timetable {
   room    String
   time    String
   day     String
-}
-
-model StudyPlan {
-  id        String   @id @default(uuid())
-  studentId String
-  plan      String
-  createdAt DateTime @default(now())
-}
-
-model Subject {
-  id       String @id @default(uuid())
-  name     String
-  syllabus String
-}
-
-model Exam {
-  id       String @id @default(uuid())
-  subject  String
-  examDate DateTime
 }
 
 enum Role {

@@ -35,7 +35,7 @@ export function AuthProvider({ children }) {
       }
 
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
         // Note: Changed from /api/ai to /api to be more generic if needed, 
         // but ensuring it points to the right place for user lookup.
         const res = await fetch(

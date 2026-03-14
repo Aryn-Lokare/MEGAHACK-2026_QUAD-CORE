@@ -8,10 +8,8 @@ import multer from 'multer';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
-// Load env vars from apps/api/.env (for GROQ_API_KEY) and packages/database/.env (for DATABASE_URL)
+// Load env vars handled by server.js (import 'dotenv/config') or node --env-file
 const __dirname = dirname(fileURLToPath(import.meta.url));
-config({ path: resolve(__dirname, '../../.env') });
-config({ path: resolve(__dirname, '../../../../packages/database/.env') });
 
 import { auth } from '../middleware/auth.js';
 
@@ -183,6 +181,63 @@ router.delete('/knowledge/:id', auth, isStaff, async (req, res) => {
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+// POST /api/ai/study-plan/generate - Generate AI Study Plan using Groq LLM (Protected)
+router.post('/study-plan/generate', auth, async (req, res) => {
+  try {
+    const { syllabus, weakSubjects, exams, assignments, hours } = req.body;
+
+    // Build a much more rigid and structured prompt for Groq to prevent hallucinations
+    const systemPrompt = `You are a professional Academic Success Coach. Your task is to generate a highly detailed, realistic, and structured study schedule.
+    
+    FORMATTING RULES:
+    - Return the study plan ONLY as a Markdown TABLE.
+    - No conversational filler, no "Here is your plan", no "Good luck".
+    - Columns MUST be: | Day | Time Slot | Subject/Topic | Task Description | Priority |
+    - Use header rows and separator lines correctly for Markdown tables.
+    - Use bold text for key concepts.
+    - If a subject is marked as "Weak", allocate at least 40% of the total study time to it.
+    - Respect all assignment deadlines and exam dates.
+    - If the user provides insufficient info, make reasonable academic assumptions based on standard university curricula.`;
+
+    const userPrompt = `Generate a study plan for a student with the following details:
+    - Syllabus/Topics: ${JSON.stringify(syllabus)}
+    - Weak Subjects (Prioritize these): ${weakSubjects || 'None'}
+    - Scheduled Exams: ${JSON.stringify(exams)}
+    - Assignment Deadlines: ${JSON.stringify(assignments)}
+    - Daily Availability: ${hours} hours per day
+    
+    The plan must be a day-by-day breakdown until the final exam date provided (or for the next 7 days if no date is provided).`;
+
+    const completion = await groq.chat.completions.create({
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ],
+      model: "llama-3.3-70b-versatile", // Use the supported high-performance Llama 3.3 70B model
+      temperature: 0.4,
+    });
+
+    const generatedPlan = completion.choices[0]?.message?.content || "Could not generate plan.";
+
+    console.log(`Plan generated for user ${req.user.email}. Length: ${generatedPlan.length}`);
+
+    // Optionally save it to DB
+    const studyPlanRecord = await prisma.studyPlan.create({
+      data: {
+        studentId: req.user.id,
+        plan: generatedPlan
+      }
+    });
+
+    console.log(`Study Plan saved with ID: ${studyPlanRecord.id}`);
+
+    res.json({ plan: generatedPlan, studyPlanId: studyPlanRecord.id });
+  } catch (error) {
+    console.error('Error generating study plan:', error);
+    res.status(500).json({ error: error.message || 'Failed to generate study plan' });
   }
 });
 
