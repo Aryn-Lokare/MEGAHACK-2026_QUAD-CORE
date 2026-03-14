@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,8 @@ import {
   ScrollView,
   ActivityIndicator,
   Dimensions,
+  Animated,
+  Easing,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -22,6 +24,23 @@ const LoginScreen = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+
+  const progressAnim = useRef(new Animated.Value(-100)).current;
+
+  useEffect(() => {
+    if (loading) {
+      Animated.loop(
+        Animated.timing(progressAnim, {
+          toValue: 100,
+          duration: 1500,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        })
+      ).start();
+    } else {
+      progressAnim.setValue(-100);
+    }
+  }, [loading, progressAnim]);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -142,6 +161,34 @@ const LoginScreen = () => {
           </LinearGradient>
         </TouchableOpacity>
 
+        {/* Progress Bar Container */}
+        {loading && (
+          <View style={styles.progressBarContainer}>
+            <Animated.View
+              style={[
+                styles.progressBar,
+                {
+                  transform: [
+                    {
+                      translateX: progressAnim.interpolate({
+                        inputRange: [-100, 100],
+                        outputRange: [-Dimensions.get('window').width, Dimensions.get('window').width],
+                      }),
+                    },
+                  ],
+                },
+              ]}
+            >
+              <LinearGradient
+                colors={['#1b294b', '#4468bb', '#1b294b']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={StyleSheet.absoluteFill}
+              />
+            </Animated.View>
+          </View>
+        )}
+
         {error && <Text style={styles.errorText}>{error}</Text>}
       </View>
 
@@ -226,6 +273,17 @@ const styles = StyleSheet.create({
     color: '#edf2f7',
     fontSize: 16,
     fontWeight: '700',
+  },
+  progressBarContainer: {
+    height: 4,
+    backgroundColor: '#1b294b',
+    borderRadius: 2,
+    marginTop: 16,
+    overflow: 'hidden',
+  },
+  progressBar: {
+    flex: 1,
+    width: '100%',
   },
   errorText: {
     color: '#EF4444',

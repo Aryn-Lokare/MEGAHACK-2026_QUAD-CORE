@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"
 import { useRouter, Stack } from "expo-router"
 import { Image } from "expo-image"
-import { useAuth } from "@/context/AuthContext"
+import { useAuth } from "../../context/AuthContext"
 
 const { width, height } = Dimensions.get("window")
 const SIDEBAR_WIDTH = width * 0.8
@@ -35,6 +35,9 @@ export default function StudentHomeScreen() {
       }).start(() => setIsMenuVisible(false))
     }
   }
+
+  // Handle local require ID or remote URI
+  const profileSource = typeof avatar === 'number' ? avatar : { uri: avatar }
 
   return (
     <View style={{ flex: 1 }}>
@@ -85,13 +88,13 @@ export default function StudentHomeScreen() {
         </View>
 
         <View style={styles.upcomingClassesList}>
-          <ClassCard
+          <ClassCard 
             room="Room 402, Eng. Block"
             title="Advanced Algorithms"
             time="10:00 AM - 11:30 AM"
             image="https://lh3.googleusercontent.com/aida-public/AB6AXuCHC29YIYSj06txvZj7PhMlJ8JLM57j3xbI2leMgFzfgq1MARrAWnrEusz-SCCeIOjD2NCPhiyeW6yDvLY6dDX_n-AEUSAaBe4BpLilXfxyzOidU4eLvA724C82NJre0QEBPomMXwixSkJ6vx83u92PUgxROnPHL7NTjd1NMVNbyR6abGwmoQpyXwU7obtnELjGT9ngUAVppSzzlxEBE0Pt9qZK-E7kQpCVoeKOVZW1BFH5JXl14zJMSCIAag4qdb_jpbEL80p-6uU"
           />
-          <ClassCard
+          <ClassCard 
             room="Lab 12, Science Wing"
             title="Database Systems Lab"
             time="01:00 PM - 03:00 PM"
@@ -156,30 +159,30 @@ export default function StudentHomeScreen() {
             <View style={styles.sidebarDivider} />
 
             <View style={styles.sidebarContent}>
-              <SidebarItem
-                icon="person-outline"
-                label="Edit Profile"
+              <SidebarItem 
+                icon="person-outline" 
+                label="Edit Profile" 
                 onPress={() => {
                   toggleMenu(false)
                   router.push("/(student)/edit-profile")
-                }}
+                }} 
               />
-              <SidebarItem
-                icon="image-outline"
-                label="Change Avatar"
+              <SidebarItem 
+                icon="image-outline" 
+                label="Change Avatar" 
                 onPress={() => {
                   toggleMenu(false)
                   router.push("/(student)/avatar-picker")
-                }}
+                }} 
               />
               <SidebarItem icon="help-circle-outline" label="Help and Support" onPress={() => toggleMenu(false)} />
-
+              
               <View style={[styles.sidebarDivider, { marginVertical: 10 }]} />
-
-              <SidebarItem
-                icon="log-out-outline"
-                label="Logout"
-                color="#ef4444"
+              
+              <SidebarItem 
+                icon="log-out-outline" 
+                label="Logout" 
+                color="#ef4444" 
                 onPress={() => {
                   toggleMenu(false)
                   Alert.alert(
@@ -187,14 +190,14 @@ export default function StudentHomeScreen() {
                     "Are you sure you want to log out?",
                     [
                       { text: "Cancel", style: "cancel" },
-                      {
-                        text: "Logout",
-                        style: "destructive",
-                        onPress: () => signOut()
+                      { 
+                        text: "Logout", 
+                        style: "destructive", 
+                        onPress: () => signOut() 
                       }
                     ]
                   )
-                }}
+                }} 
               />
             </View>
           </Animated.View>
@@ -273,14 +276,24 @@ const styles = StyleSheet.create({
   headerName: { fontSize: 24, fontWeight: "bold", color: "#0f172a" },
   headerUniversity: { fontSize: 11, fontWeight: "600", color: "#64748b", textTransform: "uppercase", letterSpacing: 1 },
   headerProfilePic: { width: 52, height: 52, borderRadius: 26, borderWidth: 2, borderColor: "#1458b8" },
-
-  welcomeSection: { flexDirection: "row", alignItems: "center", padding: 20, gap: 16 },
+  
+  welcomeSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 20,
+    gap: 16,
+  },
   welcomeProfilePic: { width: 80, height: 80, borderRadius: 40, borderWidth: 2, borderColor: "#1458b8" },
   welcomeTextContainer: { flex: 1 },
   welcomeTitle: { fontSize: 20, fontWeight: "bold", color: "#0f172a" },
   welcomeSubtitle: { fontSize: 13, color: "#64748b", fontWeight: "500" },
 
-  quickActionsGrid: { flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 16, gap: 12 },
+  quickActionsGrid: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    gap: 12,
+  },
   quickActionCard: {
     flex: 1,
     backgroundColor: "#fff",
@@ -296,10 +309,24 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  quickActionIconContainer: { width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center", marginBottom: 10 },
+  quickActionIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
   quickActionLabel: { fontSize: 12, fontWeight: "700", color: "#0f172a" },
 
-  sectionHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20, paddingTop: 28, paddingBottom: 16 },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 28,
+    paddingBottom: 16,
+  },
   sectionTitle: { fontSize: 18, fontWeight: "bold", color: "#0f172a" },
   viewMoreLink: { fontSize: 12, fontWeight: "bold", color: "#1458b8" },
 
@@ -325,11 +352,18 @@ const styles = StyleSheet.create({
   classTimeText: { fontSize: 13, color: "#1458b8", fontWeight: "700" },
   classImage: { width: 90, height: 90, borderRadius: 12 },
 
-  announcementsCard: { backgroundColor: "#fff", marginHorizontal: 20, borderRadius: 16, borderWidth: 1, borderColor: "#e2e8f0", overflow: "hidden" },
+  announcementsCard: {
+    backgroundColor: "#fff",
+    marginHorizontal: 20,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+    overflow: "hidden",
+  },
   announcementItem: { padding: 16, borderBottomWidth: 1, borderBottomColor: "#f1f5f9" },
   noBorder: { borderBottomWidth: 0 },
   announcementTopRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 6 },
-  tagBadge: { borderRadius: 20, paddingHorizontal: 10, paddingVertical: 4 },
+  tagBadge: { px: 10, py: 4, borderRadius: 20, paddingHorizontal: 10, paddingVertical: 4 },
   tagText: { fontSize: 10, fontWeight: "bold", textTransform: "uppercase" },
   timeAgoText: { fontSize: 10, color: "#94a3b8" },
   announcementTitle: { fontSize: 14, fontWeight: "bold", color: "#0f172a" },
@@ -338,11 +372,21 @@ const styles = StyleSheet.create({
   // Sidebar Styles
   modalOverlay: { flex: 1 },
   modalBackdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: "rgba(0,0,0,0.5)" },
-  sidebarContainer: {
-    position: "absolute", right: 0, top: 0, bottom: 0, width: SIDEBAR_WIDTH,
-    backgroundColor: "#fff", paddingVertical: 40, paddingHorizontal: 20,
-    elevation: 25, shadowColor: "#000",
-    shadowOffset: { width: -4, height: 0 }, shadowOpacity: 0.2, shadowRadius: 10, zIndex: 9999,
+  sidebarContainer: { 
+    position: "absolute",
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: SIDEBAR_WIDTH,
+    backgroundColor: "#fff", 
+    paddingVertical: 40, 
+    paddingHorizontal: 20, 
+    elevation: 25, 
+    shadowColor: "#000",
+    shadowOffset: { width: -4, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    zIndex: 9999,
   },
   sidebarHeader: { flexDirection: "row", alignItems: "center", marginBottom: 30 },
   closeButton: { marginRight: 12 },

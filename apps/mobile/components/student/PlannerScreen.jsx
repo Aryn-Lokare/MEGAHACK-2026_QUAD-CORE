@@ -6,10 +6,14 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Platform
+  Platform,
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import Markdown from 'react-native-markdown-display';
+import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 
 const { width } = Dimensions.get('window');
@@ -62,6 +66,54 @@ export default function PlannerScreen() {
 
   const userName = user?.name?.split(" ")[0] || "Alex";
 
+  const [loading, setLoading] = useState(false);
+  const [plan, setPlan] = useState(null);
+  const [studyPlanId, setStudyPlanId] = useState(null);
+
+  const generateStudyPlan = async () => {
+    try {
+      setLoading(true);
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError || !session) {
+        Alert.alert('Authentication Error', 'You must be logged in to generate a study plan.');
+        setLoading(false);
+        return;
+      }
+
+      let apiUrl = process.env.EXPO_PUBLIC_API_BASE_URL || process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000';
+
+      const response = await fetch(`${apiUrl}/api/ai/study-plan/generate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({
+          syllabus: "Data Structures, React Native, SQL",
+          weakSubjects: "SQL",
+          exams: "Mid-Term next Friday",
+          assignments: "App UI due tommorow",
+          hours: 3
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to generate plan: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setPlan(data.plan);
+      setStudyPlanId(data.studyPlanId);
+
+    } catch (err) {
+      console.error('[PlannerScreen] Generate Error:', err);
+      Alert.alert('Error', 'Failed to generate study plan. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
       {/* Header */}
@@ -94,6 +146,28 @@ export default function PlannerScreen() {
             </View>
           ))}
         </ScrollView>
+      </View>
+
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>AI Study Planner</Text>
+      </View>
+      <View style={{ paddingHorizontal: 24, marginBottom: 16 }}>
+        <TouchableOpacity style={styles.generateButton} onPress={generateStudyPlan} disabled={loading}>
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <>
+              <Ionicons name="sparkles" size={18} color="#fff" style={{ marginRight: 8 }} />
+              <Text style={styles.generateButtonText}>Generate AI Study Plan</Text>
+            </>
+          )}
+        </TouchableOpacity>
+
+        {plan && (
+          <View style={styles.markdownContainer}>
+            <Markdown>{plan}</Markdown>
+          </View>
+        )}
       </View>
 
       <View style={styles.sectionHeader}>
@@ -184,4 +258,7 @@ const styles = StyleSheet.create({
   reminderTime: { fontSize: 14, fontWeight: '800', color: '#1458b8' },
   completedText: { color: '#94a3b8', textDecorationLine: 'line-through' },
   completedSubText: { color: '#cbd5e1' },
+  generateButton: { flexDirection: 'row', backgroundColor: '#1458b8', paddingVertical: 14, borderRadius: 12, justifyContent: 'center', alignItems: 'center', shadowColor: '#1458b8', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 4 },
+  generateButtonText: { color: '#fff', fontSize: 15, fontWeight: 'bold' },
+  markdownContainer: { marginTop: 16, backgroundColor: '#fff', padding: 16, borderRadius: 12, borderWidth: 1, borderColor: '#f1f5f9' },
 });

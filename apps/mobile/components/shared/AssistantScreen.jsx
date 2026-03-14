@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 
 const { width } = Dimensions.get('window');
@@ -50,15 +51,24 @@ export default function AssistantScreen() {
     setIsLoading(true);
 
     try {
-      let apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001';
-      apiUrl = apiUrl.replace(':5000', ':5001');
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError || !session) {
+        setMessages(prev => [...prev, { role: 'assistant', text: "Authentication error. Please log in again to use the assistant." }]);
+        return;
+      }
+
+      let apiUrl = process.env.EXPO_PUBLIC_API_BASE_URL || process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000';
 
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
       const response = await fetch(`${apiUrl}/api/ai/query`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
+        },
         body: JSON.stringify({ query: trimmedText }),
         signal: controller.signal
       });
@@ -73,7 +83,7 @@ export default function AssistantScreen() {
       console.error("AI Query Error:", error);
       setMessages(prev => [...prev, {
         role: 'assistant',
-        text: "Sorry, I couldn't connect to the campus intelligence system. If you are on a real device, make sure the API URL points to your computer's IP address instead of localhost."
+        text: "Sorry, I couldn't connect to the campus intelligence system at the moment. Please try again later."
       }]);
     } finally {
       setIsLoading(false);

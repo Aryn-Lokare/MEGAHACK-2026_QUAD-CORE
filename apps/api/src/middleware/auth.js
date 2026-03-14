@@ -1,89 +1,85 @@
-import jwt from "jsonwebtoken"
+import { createClient } from "@supabase/supabase-js"
+import { createRequire } from 'module';
 import prisma from "@repo/database"
-import jwksClient from "jwks-rsa"
+import jwt from 'jsonwebtoken';
+import fs from "fs"
 
-const client = jwksClient({
-  jwksUri: `${process.env.SUPABASE_URL}/auth/v1/.well-known/jwks.json`,
-  cache: true,
-  rateLimit: true,
-  jwksRequestsPerMinute: 10
-});
+import path from "path"
+import { fileURLToPath } from 'url';
 
-function getKey(header, callback) {
-  if (header.alg === 'HS256') {
-     const secret = process.env.SUPABASE_JWT_SECRET;
-     // Try both raw and base64 for HS256 as fallback
-     callback(null, secret);
-  } else {
-    client.getSigningKey(header.kid, function(err, key) {
-      if (err) {
-        callback(err);
-      } else {
-        const signingKey = key.getPublicKey();
-        callback(null, signingKey);
-      }
-    });
-  }
-}
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const logFile = path.join(__dirname, "../..", "debug.log");
+
+const require = createRequire(import.meta.url);
+const log = (msg) => {
+  const line = `${new Date().toISOString()} - ${msg}\n`;
+  fs.appendFileSync(logFile, line);
+};
+
+// Diagnostic logging for top-level env
+log(`Top-level process.env.SUPABASE_URL set: ${!!process.env.SUPABASE_URL}`)
+
+// Add jwt verification config
+const jwtSecret = process.env.SUPABASE_JWT_SECRET;
+log(`JWT Secret set: ${!!jwtSecret}`)
 
 export async function auth(req, res, next) {
   try {
     const header = req.headers.authorization
     if (!header || !header.startsWith("Bearer ")) {
+      log(`[${req.method} ${req.url}] Auth failed: Missing header`)
       return res.status(401).json({ error: "Missing or invalid authorization header" })
     }
 
     const token = header.split(" ")[1]
-    const secret = process.env.SUPABASE_JWT_SECRET
     
-    // 1. Verify JWT
-    jwt.verify(token, getKey, { algorithms: ['HS256', 'ES256'] }, async (err, decoded) => {
-      try {
-        if (err) {
-          console.error("[AUTH ERROR] JWT verify failed:", err.message);
-          
-          // Final fallback: If HS256 verify failed with raw string, try base64 manually
-          if (err.message === 'invalid signature' || err.message === 'invalid algorithm') {
-             try {
-               const decodedSecret = Buffer.from(secret, 'base64');
-               const manualDecoded = jwt.verify(token, decodedSecret, { algorithms: ['HS256'] });
-               return await handleVerifiedUser(manualDecoded, req, res, next);
-             } catch (e) {
-               console.error("[AUTH ERROR] All verification methods failed.");
-               return res.status(401).json({ error: "Unauthorized", details: "Invalid token" });
-             }
-          }
-          
-          return res.status(401).json({ error: "Unauthorized", details: err.message });
+    // 1. Decode token to get user info regardless of algorithm (alg-agnostic)
+    const decoded = jwt.decode(token);
+    if (!decoded || !decoded.email) {
+      log(`[${req.method} ${req.url}] Auth failed: Malformed token`)
+      return res.status(401).json({ error: "Unauthorized: Invalid Token Format" });
+    }
+
+    const userEmail = decoded.email;
+    log(`[${req.method} ${req.url}] Attempting auth for ${userEmail}`);
+
+    // 2. Verify with Supabase SDK (Handles ES256/HS256 automatically)
+    const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+
+    if (error || !user) {
+      log(` Supabase verify FAILED for ${userEmail}: ${error?.message || 'No user'}`);
+      
+      // OPTIONAL: In development, if we have a valid decoded session from our own Supabase URL, 
+      // we might allow it even if the SDK is being flaky. But let's stay secure for now.
+      return res.status(401).json({ error: `Unauthorized: ${error?.message || 'Invalid Session'}` });
+    }
+
+    // 3. JIT User Provisioning
+    let dbUser = await prisma.user.findUnique({ where: { email: userEmail } })
+    
+    if (!dbUser) {
+      log(`User ${userEmail} not found in DB - JIT creation starting`);
+      
+      const adminExists = await prisma.user.findFirst({ where: { role: 'ADMIN' } })
+      const autoApproved = !adminExists 
+      
+      dbUser = await prisma.user.create({
+        data: {
+          email: userEmail,
+          name: decoded.user_metadata?.full_name || userEmail.split('@')[0],
+          role: autoApproved ? 'ADMIN' : 'STUDENT',
+          status: autoApproved ? 'APPROVED' : 'PENDING'
         }
+      })
+      log(`JIT Profile created for ${dbUser.email}`);
+    }
 
-        await handleVerifiedUser(decoded, req, res, next);
-      } catch (callbackErr) {
-        console.error("[AUTH ERROR] Exception in verify callback:", callbackErr);
-        res.status(500).json({ error: "Internal server error during authentication" });
-      }
-    });
-
+    req.user = dbUser
+    next()
   } catch (err) {
-    console.error("[AUTH ERROR] Auth middleware caught error:", err);
+    log(`Unexpected auth error: ${err.message}`)
     return res.status(401).json({ error: "Unauthorized", details: err.message })
   }
-}
-
-async function handleVerifiedUser(decoded, req, res, next) {
-  const email = decoded.email
-  if (!email) {
-    console.error("[AUTH ERROR] No email found in JWT claims.")
-    return res.status(401).json({ error: "Unauthorized", details: "No email in token" })
-  }
-
-  const user = await prisma.user.findUnique({ where: { email } })
-  if (!user) {
-    console.error(`[AUTH ERROR] User NOT FOUND in database for email: ${email}`)
-    return res.status(401).json({ error: "Unauthorized", details: `User ${email} not found in campus database` })
-  }
-
-  console.log(`[AUTH SUCCESS] User ${email} verified. Status: ${user.status}, Role: ${user.role}`)
-  req.user = user
-  next()
 }
