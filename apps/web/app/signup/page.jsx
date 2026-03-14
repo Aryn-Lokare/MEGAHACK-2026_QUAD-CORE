@@ -27,7 +27,8 @@ export default function Signup() {
   useEffect(() => {
     const checkAdmin = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin-exists`)
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+        const res = await fetch(`${apiUrl}/admin-exists`)
         if (res.ok) {
           const data = await res.json()
           setAdminExists(data.exists)
@@ -55,7 +56,8 @@ export default function Signup() {
       if (signUpError) throw signUpError
 
       // 2. Create user profile in our DB via API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, name, role: selectedRole }),

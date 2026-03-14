@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -37,13 +37,6 @@ export function Sidebar() {
         { icon: BarChart3, label: 'Analytics', href: '/faculty/analytics' },
         { icon: Calendar, label: 'Predictions', href: '/faculty/predictions' },
         { icon: Settings, label: 'Settings', href: '/faculty/settings' },
-      ];
-    }
-    if (user?.role === 'STUDENT') {
-      return [
-        { icon: LayoutDashboard, label: 'Dashboard', href: '/student' },
-        { icon: BookOpen, label: 'Study Planner', href: '/student/AIStudyPlanner' },
-        { icon: Settings, label: 'Settings', href: '/student/settings' },
       ];
     }
     return [];

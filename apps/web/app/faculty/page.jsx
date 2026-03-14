@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect } from "react"
 import { useAuth } from "../../src/context/AuthContext"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -8,10 +7,6 @@ import Link from "next/link"
 export default function FacultyDashboard() {
   const { signOut } = useAuth()
   const router = useRouter()
-
-  useEffect(() => {
-    router.replace("/faculty/dashboard")
-  }, [router])
 
   return (
     <main className="min-h-screen bg-[#030712] text-white p-8">

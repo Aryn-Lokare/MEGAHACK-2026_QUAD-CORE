@@ -76,7 +76,6 @@ export class AnalyticsService {
       };
     } catch (error) {
       console.error("Error in getDashboardMetrics:", error);
-      // Return defaults instead of throwing to prevent 500
       return {
         totalStudents: 0,
         totalCourses: 0,
@@ -90,7 +89,7 @@ export class AnalyticsService {
 
   async getStudentAnalytics(studentId) {
     const submissions = await prisma.submission.findMany({
-      where: { userId: studentId } // mapping userId to student for now
+      where: { userId: studentId }
     });
 
     const grades = submissions.filter(s => s.grade !== null).map(s => s.grade);
@@ -105,12 +104,11 @@ export class AnalyticsService {
       averageGrade: Math.round(averageGrade * 10) / 10,
       completionRate: Math.round(completionRate),
       lateSubmissionRate: Math.round(lateSubmissionRate),
-      activityScore: 80 // Mock activity score for now
+      activityScore: 80 
     };
   }
 
   async getPerformanceTrends() {
-    // Generate weekly averages for the last 5 weeks
     const trends = [];
     for (let i = 4; i >= 0; i--) {
       const date = new Date();
@@ -154,7 +152,6 @@ export class AnalyticsService {
   }
 
   async getActivityPatterns() {
-    // Last 7 days activity
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const results = [];
     for (let i = 6; i >= 0; i--) {
@@ -162,8 +159,6 @@ export class AnalyticsService {
       date.setDate(date.getDate() - i);
       const dayName = days[date.getDay()];
       
-      // In a real app, we'd query an Activity log table. 
-      // For now, let's derive it from submission counts + a base noise for realism
       const subCount = await prisma.submission.count({
         where: {
           submittedAt: {

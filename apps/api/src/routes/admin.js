@@ -5,7 +5,11 @@ import prisma from "@repo/database"
 import fs from "fs"
 import path from "path"
 
-const logFile = "n:/ai-campus-management/apps/api/debug.log"
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const logFile = path.join(__dirname, "../..", "debug.log");
 const log = (msg) => {
   const time = new Date().toISOString()
   fs.appendFileSync(logFile, `${time} - ${msg}\n`)
