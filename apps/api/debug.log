@@ -157,3 +157,64 @@ Log Initialized
 2026-03-13T22:07:55.943Z - AUTH: Auth success for sohamstamhankar1532@gmail.com (FACULTY)
 2026-03-13T22:07:56.271Z - AUTH: Supabase auth success: sohamstamhankar1532@gmail.com
 2026-03-13T22:07:56.318Z - AUTH: Auth success for sohamstamhankar1532@gmail.com (FACULTY)
+2026-03-13T23:16:57.627Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:16:57.705Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:16:57.822Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:16:57.898Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:22:08.870Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:22:08.919Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:27:35.160Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:27:35.213Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:27:35.411Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:27:35.456Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:27:35.472Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:27:35.579Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:27:36.428Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:27:36.433Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:27:48.597Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:27:48.637Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:27:48.646Z - GET /admin/users called by aryanlokare233@gmail.com
+2026-03-13T23:27:48.842Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:27:48.881Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:27:48.882Z - GET /admin/users called by aryanlokare233@gmail.com
+2026-03-13T23:28:00.976Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:28:00.990Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:28:01.028Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:28:01.047Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:28:06.784Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:28:06.828Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:28:06.829Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-13T23:28:06.885Z - Found 0 pending users
+2026-03-13T23:28:07.153Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:28:07.200Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:28:07.201Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-13T23:28:07.247Z - Found 0 pending users
+2026-03-13T23:28:09.586Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:28:09.646Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:28:10.472Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-13T23:28:10.519Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-13T23:32:00.507Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:33:00.749Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:33:00.788Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:33:28.339Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:33:28.459Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:33:35.225Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:33:35.267Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:33:35.306Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:34:09.493Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:36:37.998Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:45:30.548Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:45:30.713Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:45:30.780Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:50:34.390Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:50:34.431Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:51:10.137Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:51:10.178Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:51:16.049Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:51:16.098Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:51:39.558Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:51:39.602Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:54:09.472Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:54:09.521Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:54:29.306Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-13T23:54:29.341Z - AUTH: Supabase auth failed: Auth session missing!

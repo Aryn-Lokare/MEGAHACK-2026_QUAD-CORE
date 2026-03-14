@@ -18,11 +18,14 @@ model User {
 }
 
 model Course {
-  id         String   @id @default(uuid())
-  name       String
-  title      String?
-  department String
-  createdAt  DateTime @default(now())
+  id                String   @id @default(uuid())
+  name              String
+  title             String?
+  department        String
+  googleClassroomId String?  @unique
+  facultyId         String?
+  createdAt         DateTime @default(now())
+  assignments       Assignment[]
 }
 
 model Activity {
@@ -33,14 +36,41 @@ model Activity {
 }
 
 model Assignment {
-  id          String   @id @default(uuid())
-  title       String
-  subject     String?
-  description String?
-  deadline    DateTime?
-  status      String
-  userId      String
-  createdAt   DateTime @default(now())
+  id                 String   @id @default(uuid())
+  title              String
+  subject            String?
+  description        String?
+  deadline           DateTime?
+  status             String
+  userId             String?
+  courseId           String?
+  googleCourseWorkId String?  @unique
+  course             Course?  @relation(fields: [courseId], references: [id])
+  submissions        Submission[]
+  createdAt          DateTime @default(now())
+}
+
+model Submission {
+  id                 String   @id @default(uuid())
+  assignmentId       String
+  userId             String?
+  studentEmail       String
+  googleSubmissionId String?  @unique
+  grade             Float?
+  status             String
+  late               Boolean  @default(false)
+  submittedAt        DateTime?
+  assignment         Assignment @relation(fields: [assignmentId], references: [id])
+  createdAt          DateTime @default(now())
+}
+
+model Prediction {
+  id             String   @id @default(uuid())
+  studentId      String
+  riskLevel      String
+  predictedGrade String
+  recommendation String?
+  createdAt      DateTime @default(now())
 }
 
 model CampusKnowledge {

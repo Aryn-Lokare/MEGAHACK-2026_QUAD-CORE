@@ -1,34 +1,75 @@
 @import "tailwindcss";
 
-:root {
-  --background: #F8FAFC;
-  --foreground: #000000;
+@theme inline {
+  --color-bright-snow: #F9FAFB;
+  --color-electric-sapphire-50: #EFF6FF;
+  --color-electric-sapphire-100: #DBEAFE;
+  --color-electric-sapphire-200: #BFDBFE;
+  --color-electric-sapphire-300: #93C5FD;
+  --color-electric-sapphire-400: #60A5FA;
+  --color-electric-sapphire-500: #0F62FE;
+  --color-electric-sapphire-600: #2563EB;
+  --color-electric-sapphire-700: #1D4ED8;
+  --color-electric-sapphire-800: #1E40AF;
+  --color-electric-sapphire-900: #1E3A8A;
+  --color-electric-sapphire-950: #172554;
+
+  --color-charcoal-blue-50: #F8FAFC;
+  --color-charcoal-blue-100: #F1F5F9;
+  --color-charcoal-blue-200: #E2E8F0;
+  --color-charcoal-blue-300: #CBD5E1;
+  --color-charcoal-blue-400: #94A3B8;
+  --color-charcoal-blue-500: #64748B;
+  --color-charcoal-blue-600: #475569;
+  --color-charcoal-blue-700: #334155;
+  --color-charcoal-blue-800: #1E293B;
+  --color-charcoal-blue-900: #101827;
+  --color-charcoal-blue-950: #020617;
+
+  --color-prussian-blue-50: #F0F9FF;
+  --color-prussian-blue-900: #0C4A6E;
+  --color-prussian-blue-950: #082F49;
+  
+  --color-background: var(--color-charcoal-blue-950);
+  --color-foreground: var(--color-bright-snow);
+  --color-card: var(--color-charcoal-blue-900);
+  --color-primary: var(--color-electric-sapphire-500);
+
+  --font-heading: "Open Sans", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-electric-sapphire: #0F62FE;
-  --color-prussian-blue: #002D9C;
-  --color-slate-900: #0F172A;
-  --color-slate-50: #F8FAFC;
-  --color-white: #FFFFFF;
-  
-  --color-background: var(--background);
-  --color-card: var(--color-white);
-  --color-primary: var(--color-electric-sapphire);
-  --color-secondary: var(--color-prussian-blue);
-
-  --font-heading: var(--font-open-sans);
-  --font-body: var(--font-inter);
+:root {
+  --background: #020617;
+  --foreground: #F9FAFB;
 }
 
 body {
   background: var(--color-background);
-  color: var(--foreground);
+  color: var(--color-foreground);
   font-family: var(--font-body);
-  @apply antialiased;
+  @apply antialiased min-h-screen;
 }
 
-h1, h2, h3, h4, h5, h6, button {
+h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  @apply text-black;
+}
+
+button {
+  font-family: var(--font-heading);
+}
+
+/* Custom Scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-charcoal-blue-950);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-charcoal-blue-800);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-charcoal-blue-700);
 }
