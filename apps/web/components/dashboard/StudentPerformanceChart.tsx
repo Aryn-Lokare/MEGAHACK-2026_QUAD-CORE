@@ -10,15 +10,18 @@ import {
   ResponsiveContainer 
 } from 'recharts';
 
-const data = [
-  { name: 'Week 1', average: 72 },
-  { name: 'Week 2', average: 75 },
-  { name: 'Week 3', average: 70 },
-  { name: 'Week 4', average: 82 },
-  { name: 'Week 5', average: 78 },
-];
+interface StudentPerformanceChartProps {
+  data?: Array<{ name: string; average: number }>;
+}
 
-export function StudentPerformanceChart() {
+export function StudentPerformanceChart({ data: propData }: StudentPerformanceChartProps) {
+  const chartData = propData || [
+    { name: 'Week 1', average: 70 },
+    { name: 'Week 2', average: 70 },
+    { name: 'Week 3', average: 70 },
+    { name: 'Week 4', average: 70 },
+    { name: 'Week 5', average: 70 },
+  ];
   return (
     <div className="h-[350px] w-full bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all">
       <div className="mb-6">
@@ -26,7 +29,7 @@ export function StudentPerformanceChart() {
         <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Weekly Average Progress</p>
       </div>
       <ResponsiveContainer width="100%" height="75%">
-        <AreaChart data={data}>
+        <AreaChart data={chartData}>
           <defs>
             <linearGradient id="colorAvg" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#0F62FE" stopOpacity={0.1}/>

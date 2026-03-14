@@ -8,20 +8,28 @@ import { CourseAnalyticsChart } from '../../../components/dashboard/CourseAnalyt
 import { ActivityAnalyticsChart } from '../../../components/dashboard/ActivityAnalyticsChart';
 import { ActivityFeed } from '../../../components/dashboard/ActivityFeed';
 import { AdminLayout } from '../../../components/layout/AdminLayout';
-import { supabase } from '../../../src/context/AuthContext';
+import { useAuth, supabase } from '../../../src/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function AdminDashboardPage() {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
+    if (!user) return;
     setLoading(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        console.error("No active session found during fetchData");
+        return;
+      }
       
       const response = await fetch('/api/analytics/dashboard', {
         headers: {
-          'Authorization': session ? `Bearer ${session.access_token}` : ''
+          'Authorization': `Bearer ${session.access_token}`
         },
         cache: 'no-store'
       });
@@ -41,8 +49,16 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (!authLoading && (!user || user.role !== 'ADMIN')) {
+      router.push('/');
+    }
+  }, [user, authLoading, router]);
+
+  useEffect(() => {
+    if (!authLoading && user && user.role === 'ADMIN') {
+      fetchData();
+    }
+  }, [authLoading, user]);
 
   if (loading) {
     return (

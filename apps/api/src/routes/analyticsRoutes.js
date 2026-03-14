@@ -5,10 +5,22 @@ import { roles } from "../middleware/roles.js";
 
 const router = Router();
 
-// Protect analytics with ADMIN role
-router.get("/dashboard", auth, roles(["ADMIN"]), async (req, res) => {
+// Protect analytics with ADMIN/FACULTY role
+router.get("/dashboard", auth, async (req, res) => {
   try {
-    const data = await getDashboardAnalytics();
+    let data;
+    if (req.user.role === 'ADMIN') {
+      const { getAdminDashboardAnalytics } = await import("../services/analyticsService.js");
+      data = await getAdminDashboardAnalytics();
+    } else {
+      const service = (await import("../services/analyticsService.js")).default;
+      const metrics = await service.getDashboardMetrics();
+      const trends = await service.getPerformanceTrends();
+      const completion = await service.getCompletionStats();
+      const activity = await service.getActivityPatterns();
+      
+      data = { metrics, trends, completion, activity };
+    }
     res.json(data);
   } catch (error) {
     console.error("Analytics Error:", error);

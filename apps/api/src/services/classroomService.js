@@ -232,30 +232,25 @@ export class ClassroomService {
         }
       }
 
-      // 5. Predictions
+      // 5. Predictions (AI Powered)
+      const { PredictionService } = await import('./predictionService.js');
+      const predictionService = new PredictionService();
+
       for (const student of students) {
           const subs = await prisma.submission.findMany({ where: { userId: student.id } });
-          const avg = subs.length > 0 ? subs.reduce((acc, s) => acc + (s.grade || 0), 0) / subs.length : 0;
-          const missing = assignments.length - subs.length;
+          const grades = subs.filter(s => s.grade !== null).map(s => s.grade);
+          const avg = grades.length > 0 ? grades.reduce((acc, g) => acc + g, 0) / grades.length : 0;
           
-          let risk, predicted, rec;
-          if (avg > 85 && missing === 0) {
-              risk = 'Low'; predicted = 'A'; rec = 'Exceptional performance. Keep it up.';
-          } else if (avg < 50 || missing > 2) {
-              risk = 'High'; predicted = 'F'; rec = 'High risk of failure. Urgent intervention required.';
-          } else if (avg < 70 || missing > 0) {
-              risk = 'Medium'; predicted = 'C'; rec = 'Moderate risk. Suggest remedial sessions.';
-          } else {
-              risk = 'Low'; predicted = 'B'; rec = 'On track. Encourage more participation.';
-          }
+          const completionRate = assignments.length > 0 ? (subs.length / assignments.length) * 100 : 0;
+          const lateSubmissions = subs.filter(s => s.late).length;
+          const lateRate = subs.length > 0 ? (lateSubmissions / subs.length) * 100 : 0;
 
-          await prisma.prediction.create({
-              data: {
-                  studentId: student.id,
-                  riskLevel: risk,
-                  predictedGrade: predicted,
-                  recommendation: rec
-              }
+          // Call the real AI prediction service
+          await predictionService.predictStudentPerformance(student.id, {
+              averageGrade: Math.round(avg),
+              completionRate: Math.round(completionRate),
+              lateSubmissionRate: Math.round(lateRate),
+              activityScore: 85 // Standard activity score for synced data
           });
       }
 

@@ -115,7 +115,7 @@ export default function Home() {
       <div className="w-full max-w-md space-y-8 z-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight text-black mb-2">
-            Campus <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Nexus</span>
+            Campus <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">AI</span>
           </h1>
           <p className="text-slate-500 text-sm">Select your role and sign in</p>
         </div>

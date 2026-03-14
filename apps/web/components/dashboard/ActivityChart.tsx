@@ -11,17 +11,21 @@ import {
   Dot
 } from 'recharts';
 
-const data = [
-  { name: 'Mon', value: 30 },
-  { name: 'Tue', value: 45 },
-  { name: 'Wed', value: 60 },
-  { name: 'Thu', value: 55 },
-  { name: 'Fri', value: 80 },
-  { name: 'Sat', value: 40 },
-  { name: 'Sun', value: 20 },
-];
+interface ActivityChartProps {
+  data?: Array<{ name: string; value: number }>;
+}
 
-export function ActivityChart() {
+export function ActivityChart({ data: propData }: ActivityChartProps) {
+  const chartData = propData || [
+    { name: 'Mon', value: 0 },
+    { name: 'Tue', value: 0 },
+    { name: 'Wed', value: 0 },
+    { name: 'Thu', value: 0 },
+    { name: 'Fri', value: 0 },
+    { name: 'Sat', value: 0 },
+    { name: 'Sun', value: 0 },
+  ];
+
   return (
     <div className="h-[350px] w-full bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all">
       <div className="mb-6">
@@ -29,7 +33,7 @@ export function ActivityChart() {
         <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Engagement levels over 7 days</p>
       </div>
       <ResponsiveContainer width="100%" height="75%">
-        <LineChart data={data}>
+        <LineChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
           <XAxis 
             dataKey="name" 

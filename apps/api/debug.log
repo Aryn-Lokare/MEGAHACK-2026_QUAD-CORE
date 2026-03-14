@@ -218,3 +218,118 @@ Log Initialized
 2026-03-13T23:54:09.521Z - AUTH: Supabase auth failed: Auth session missing!
 2026-03-13T23:54:29.306Z - AUTH: Supabase auth failed: Auth session missing!
 2026-03-13T23:54:29.341Z - AUTH: Supabase auth failed: Auth session missing!
+2026-03-14T00:26:50.062Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:26:50.070Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:26:50.079Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:26:50.116Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:26:50.161Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:26:50.200Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:26:50.303Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:26:50.438Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:26:52.422Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:26:52.429Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:26:52.467Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:26:52.468Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-14T00:26:52.475Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:26:52.476Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-14T00:26:52.517Z - Found 1 pending users
+2026-03-14T00:26:52.526Z - Found 1 pending users
+2026-03-14T00:26:55.200Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:26:55.250Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:28:45.803Z - AUTH: Auth failed: Missing or invalid authorization header
+2026-03-14T00:58:31.091Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:58:31.096Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:58:31.175Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:58:31.192Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:58:41.776Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:58:41.829Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:58:41.830Z - GET /admin/users called by aryanlokare233@gmail.com
+2026-03-14T00:58:41.933Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:58:41.992Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:58:41.993Z - GET /admin/users called by aryanlokare233@gmail.com
+2026-03-14T00:58:45.913Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:58:45.960Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:58:45.964Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:58:45.965Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-14T00:58:46.012Z - Found 1 pending users
+2026-03-14T00:58:46.017Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:58:46.017Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-14T00:58:46.056Z - Found 1 pending users
+2026-03-14T00:58:47.198Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:58:47.209Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:58:47.238Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:58:47.264Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:58:51.040Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:58:51.049Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:58:51.083Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:58:51.088Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:58:51.099Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:58:51.281Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:59:15.718Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:59:15.790Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:59:15.804Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:59:15.857Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:59:18.629Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:59:18.638Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:59:18.682Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:59:18.686Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-14T00:59:18.687Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:59:18.687Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-14T00:59:18.754Z - Found 1 pending users
+2026-03-14T00:59:18.757Z - Found 1 pending users
+2026-03-14T00:59:20.617Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:59:20.665Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:59:32.258Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:59:32.279Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T00:59:32.318Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T00:59:32.352Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:03:01.544Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:03:01.583Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:03:01.702Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:03:01.872Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:03:06.812Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:03:06.871Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:03:06.974Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:03:07.016Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:03:07.116Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:03:07.162Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:03:19.307Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:03:19.583Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:03:20.128Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:03:20.324Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:03:25.772Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:03:25.790Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:03:25.812Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:03:25.838Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:21:14.891Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:21:14.901Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:21:15.168Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:21:15.175Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:21:28.177Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:21:28.225Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:21:28.502Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:21:28.552Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:21:31.656Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:21:31.709Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:21:37.275Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:21:37.332Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:21:37.335Z - GET /admin/users called by aryanlokare233@gmail.com
+2026-03-14T01:21:37.439Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:21:37.481Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:21:37.481Z - GET /admin/users called by aryanlokare233@gmail.com
+2026-03-14T01:21:39.306Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:21:39.421Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:21:39.436Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:21:39.480Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:21:41.401Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:21:41.403Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:21:41.484Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:21:41.485Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-14T01:21:41.489Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:21:41.490Z - GET /admin/users/pending called by aryanlokare233@gmail.com
+2026-03-14T01:21:41.631Z - Found 0 pending users
+2026-03-14T01:21:41.635Z - Found 0 pending users
+2026-03-14T01:21:43.721Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:21:43.783Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)
+2026-03-14T01:21:43.935Z - AUTH: Supabase auth success: aryanlokare233@gmail.com
+2026-03-14T01:21:43.990Z - AUTH: Auth success for aryanlokare233@gmail.com (ADMIN)

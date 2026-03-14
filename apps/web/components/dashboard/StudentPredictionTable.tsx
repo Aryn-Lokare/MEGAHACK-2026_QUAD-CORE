@@ -10,6 +10,7 @@ interface StudentPrediction {
   prediction: {
     riskLevel: string;
     predictedGrade: string;
+    recommendation: string | null;
   } | null;
 }
 
@@ -30,20 +31,21 @@ export function StudentPredictionTable({ students }: StudentPredictionTableProps
         </button>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full text-left">
           <thead>
-            <tr className="text-left text-xs uppercase tracking-wider text-slate-500 bg-slate-50/50">
+            <tr className="text-xs uppercase tracking-wider text-slate-500 bg-slate-50/50">
               <th className="px-8 py-5 font-bold">Student</th>
               <th className="px-8 py-5 font-bold">Average Grade</th>
               <th className="px-8 py-5 font-bold">Completion Rate</th>
               <th className="px-8 py-5 font-bold">Risk Level</th>
               <th className="px-8 py-5 font-bold">Predicted Grade</th>
+              <th className="px-8 py-5 font-bold">Pedagogical Advice</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {students.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-8 py-20 text-center text-slate-400 font-medium">No students found.</td>
+                <td colSpan={6} className="px-8 py-20 text-center text-slate-400 font-medium">No students found.</td>
               </tr>
             ) : students.map((student) => (
               <tr key={student.id} className="hover:bg-slate-50/50 transition-colors group">
@@ -80,6 +82,22 @@ export function StudentPredictionTable({ students }: StudentPredictionTableProps
                 </td>
                 <td className="px-8 py-5 text-sm font-extrabold text-electric-sapphire-600">
                     {student.prediction?.predictedGrade || '-'}
+                </td>
+                <td className="px-8 py-5 max-w-xs">
+                  {student.prediction?.recommendation ? (
+                    <div className="flex items-start gap-2 group/tip relative">
+                      <div className="mt-0.5 p-1 rounded bg-amber-50 text-amber-600">
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                      </div>
+                      <p className="text-xs text-slate-500 font-medium leading-relaxed group-hover/tip:text-slate-900 transition-colors">
+                        {student.prediction.recommendation}
+                      </p>
+                    </div>
+                  ) : (
+                    <span className="text-slate-300 text-[10px] italic">Not yet analyzed</span>
+                  )}
                 </td>
               </tr>
             ))}

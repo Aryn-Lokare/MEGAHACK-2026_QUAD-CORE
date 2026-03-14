@@ -13,12 +13,7 @@ import { useEffect, useState } from 'react';
 export default function FacultyAnalytics() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
-  const [metrics, setMetrics] = useState({
-    totalStudents: 0,
-    totalCourses: 0,
-    assignmentCompletionRate: 0,
-    courseEngagementScore: 0
-  });
+  const [data, setData] = useState<any>(null);
 
   useEffect(() => {
     if (!authLoading && (!user || user.role !== 'FACULTY')) {
@@ -29,20 +24,24 @@ export default function FacultyAnalytics() {
   useEffect(() => {
     async function fetchMetrics() {
       try {
-        const res = await fetch('/api/faculty/dashboard');
+        const res = await fetch('/api/analytics/dashboard');
         if (res.ok) {
-          const data = await res.json();
-          setMetrics(data.metrics);
+          const result = await res.json();
+          setData(result);
         }
       } catch (err) {
         console.error("Failed to fetch analytics data:", err);
       }
     }
-    fetchMetrics();
-  }, []);
+    if (user && user.role === 'FACULTY') {
+      fetchMetrics();
+    }
+  }, [user]);
 
   if (authLoading) return <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-900 font-inter font-bold uppercase tracking-widest text-xs">Loading Analytics Engine...</div>;
   if (!user || user.role !== 'FACULTY') return null;
+
+  const metrics = data?.metrics || { totalStudents: 0, totalCourses: 0, assignmentCompletionRate: 0, averageGrade: 0, courseEngagementScore: 0 };
 
   return (
     <div className="flex min-h-screen bg-slate-50 font-inter text-slate-900">
@@ -54,63 +53,65 @@ export default function FacultyAnalytics() {
               <h1 className="text-3xl font-extrabold text-black tracking-tight mb-2">Advanced Analytics</h1>
               <p className="text-slate-500 font-medium">Detailed insights into academic performance and engagement</p>
             </div>
+            <button onClick={() => window.location.reload()} className="p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all text-slate-600 shadow-sm">
+              <BarChart3 size={20} />
+            </button>
           </header>
 
           <div className="max-w-[1600px] mx-auto">
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          <StatCard 
-            title="Avg Assignment Score" 
-            value={`${metrics.averageGrade || 0}%`} 
-            icon={TrendingUp} 
-            trend={{ value: 2.4, isUp: true }} 
-          />
-          <StatCard 
-            title="Completion Rate" 
-            value={`${metrics.assignmentCompletionRate || 0}%`} 
-            icon={CheckCircle} 
-            trend={{ value: 5.1, isUp: true }} 
-          />
-          <StatCard 
-            title="Engagement Score" 
-            value={`${metrics.courseEngagementScore || 0}%`} 
-            icon={Flame} 
-          />
-          <StatCard 
-            title="Performance Flux" 
-            value="Stable" 
-            icon={BarChart3} 
-          />
-        </div>
-
-          <div className="space-y-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-              <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-                 <h3 className="text-xl font-extrabold text-black mb-6 tracking-tight">Student Performance Trend</h3>
-                 <StudentPerformanceChart />
-              </div>
-              <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-                 <h3 className="text-xl font-extrabold text-black mb-6 tracking-tight">Assignment Completion Analysis</h3>
-                 <AssignmentCompletionChart />
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+              <StatCard 
+                title="Avg Assignment Score" 
+                value={`${metrics.averageGrade || 0}%`} 
+                icon={TrendingUp} 
+                trend={{ value: 2.4, isUp: true }} 
+              />
+              <StatCard 
+                title="Completion Rate" 
+                value={`${metrics.assignmentCompletionRate || 0}%`} 
+                icon={CheckCircle} 
+                trend={{ value: 5.1, isUp: true }} 
+              />
+              <StatCard 
+                title="Engagement Score" 
+                value={`${metrics.courseEngagementScore || 0}%`} 
+                icon={Flame} 
+              />
+              <StatCard 
+                title="Performance Flux" 
+                value="Stable" 
+                icon={BarChart3} 
+              />
             </div>
-            
-            <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-               <div className="flex justify-between items-center mb-8">
+
+            <div className="space-y-10">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
+                  <h3 className="text-xl font-extrabold text-black mb-6 tracking-tight">Student Performance Trend</h3>
+                  <StudentPerformanceChart data={data?.trends} />
+                </div>
+                <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
+                  <h3 className="text-xl font-extrabold text-black mb-6 tracking-tight">Assignment Completion Analysis</h3>
+                  <AssignmentCompletionChart data={data?.completion} />
+                </div>
+              </div>
+              
+              <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
+                <div className="flex justify-between items-center mb-8">
                   <div>
                     <h3 className="text-xl font-extrabold text-black tracking-tight">Daily Activity Patterns</h3>
                     <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Engagement trends over time</p>
                   </div>
                   <div className="flex gap-2">
-                     {['7D', '30D', '90D'].map(t => (
-                        <button key={t} className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all border ${t === '7D' ? 'bg-electric-sapphire-500 text-white border-electric-sapphire-600' : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100'}`}>
-                          {t}
-                        </button>
-                     ))}
+                    {['7D', '30D', '90D'].map(t => (
+                      <button key={t} className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all border ${t === '7D' ? 'bg-electric-sapphire-500 text-white border-electric-sapphire-600' : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100'}`}>
+                        {t}
+                      </button>
+                    ))}
                   </div>
-               </div>
-               <ActivityChart />
-            </div>
+                </div>
+                <ActivityChart data={data?.activity} />
+              </div>
             </div>
           </div>
         </main>
