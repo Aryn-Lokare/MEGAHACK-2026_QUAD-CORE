@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function FacultyStudents() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, session, loading: authLoading } = useAuth();
   const router = useRouter();
   const [students, setStudents] = useState([]);
 
@@ -19,8 +19,14 @@ export default function FacultyStudents() {
 
   useEffect(() => {
     async function fetchStudents() {
+      if (!session?.access_token) return;
       try {
-        const res = await fetch('/api/faculty/students');
+        const res = await fetch('/api/faculty/students', {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json'
+          }
+        });
         if (res.ok) {
           const data = await res.json();
           setStudents(data);
@@ -29,8 +35,10 @@ export default function FacultyStudents() {
         console.error("Failed to fetch students:", err);
       }
     }
-    fetchStudents();
-  }, []);
+    if (session) {
+      fetchStudents();
+    }
+  }, [session]);
 
   if (authLoading) return <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-900 font-inter font-bold uppercase tracking-widest text-xs">Loading Student Registry...</div>;
   if (!user || user.role !== 'FACULTY') return null;
@@ -86,7 +94,7 @@ export default function FacultyStudents() {
                     <tr key={s.id} className="hover:bg-slate-50/50 transition-colors group">
                       <td className="px-8 py-6">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-electric-sapphire-500/10 flex items-center justify-center text-electric-sapphire-600 font-bold group-hover:bg-electric-sapphire-500 group-hover:text-white transition-all">
+                          <div className="w-12 h-12 rounded-xl bg-[#0F62FE]/10 flex items-center justify-center text-[#0F62FE] font-bold group-hover:bg-gradient-to-br group-hover:from-[#0F62FE] group-hover:to-[#6366F1] group-hover:text-white transition-all">
                             {s.name.charAt(0)}
                           </div>
                           <div>
@@ -102,7 +110,7 @@ export default function FacultyStudents() {
                         <div className="flex flex-col gap-2 items-center">
                            <span className="text-sm font-extrabold text-slate-900">{s.stats?.averageGrade || 0}</span>
                            <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                              <div className="h-full bg-electric-sapphire-500" style={{ width: `${s.stats?.averageGrade || 0}%` }} />
+                              <div className="h-full bg-gradient-to-r from-[#0F62FE] to-[#6366F1]" style={{ width: `${s.stats?.averageGrade || 0}%` }} />
                            </div>
                         </div>
                       </td>

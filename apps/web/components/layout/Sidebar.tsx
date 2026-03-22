@@ -55,10 +55,10 @@ export function Sidebar() {
     <aside className="w-64 bg-charcoal-blue-950 border-r border-charcoal-blue-800 flex flex-col h-screen fixed left-0 top-0 z-50">
       <div className="p-8">
         <Link href={user?.role === 'ADMIN' ? '/admin/dashboard' : '/faculty/dashboard'} className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-electric-sapphire-500 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-electric-sapphire-500/20">
+          <div className="w-8 h-8 bg-gradient-to-br from-[#0F62FE] to-[#6366F1] rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-electric-sapphire-500/20">
             C
           </div>
-          <span className="text-xl font-extrabold text-white tracking-tighter uppercase">CampusAI</span>
+          <span className="text-xl font-extrabold text-black tracking-tighter uppercase">CampusAI</span>
         </Link>
       </div>
 
@@ -72,8 +72,8 @@ export function Sidebar() {
               className={cn(
                 "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group text-sm font-semibold",
                 isActive 
-                  ? "bg-electric-sapphire-500 text-white shadow-lg shadow-electric-sapphire-500/30" 
-                  : "text-charcoal-blue-400 hover:bg-charcoal-blue-900 hover:text-white"
+                  ? "bg-gradient-to-r from-[#0F62FE] to-[#6366F1] text-white shadow-lg shadow-indigo-500/30 ring-1 ring-white/10" 
+                  : "text-charcoal-blue-400 hover:bg-charcoal-blue-900/50 hover:text-white"
               )}
             >
               <item.icon size={20} className={cn("transition-colors", isActive ? "text-white" : "text-charcoal-blue-500 group-hover:text-white")} />

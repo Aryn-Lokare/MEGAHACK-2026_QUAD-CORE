@@ -13,17 +13,23 @@ import { useAuth } from '../../../src/context/AuthContext';
 import { useRouter } from 'next/navigation';
 
 export default function FacultyDashboard() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, session, loading: authLoading } = useAuth();
   const router = useRouter();
-  const [metrics, setMetrics] = useState({
-    totalStudents: 0,
-    totalCourses: 0,
-    assignmentCompletionRate: 0,
-    courseEngagementScore: 0
+  const [data, setData] = useState({
+    metrics: {
+      totalStudents: 0,
+      totalCourses: 0,
+      assignmentCompletionRate: 0,
+      averageGrade: 0,
+      courseEngagementScore: 0
+    },
+    trends: [],
+    completion: []
   });
   const [students, setStudents] = useState([]);
   const [syncing, setSyncing] = useState(false);
   const [showSyncSuccess, setShowSyncSuccess] = useState(false);
+  const [lastSynced, setLastSynced] = useState(null);
 
   useEffect(() => {
     if (!authLoading && (!user || user.role !== 'FACULTY')) {
@@ -31,93 +37,145 @@ export default function FacultyDashboard() {
     }
   }, [user, authLoading, router]);
 
-  useEffect(() => {
-    async function fetchMetrics() {
-      try {
-        const res = await fetch('/api/faculty/dashboard');
-        if (res.ok) {
-          const data = await res.json();
-          setMetrics(data.metrics);
-        }
-
-        const studentsRes = await fetch('/api/faculty/students');
-        if (studentsRes.ok) {
-          const studentsData = await studentsRes.json();
-          setStudents(studentsData);
-        }
-      } catch (err) {
-        console.error("Failed to fetch dashboard data:", err);
-      }
-    }
-    fetchMetrics();
-  }, []);
-
-  const handleSync = async () => {
-    setSyncing(true);
+  const fetchData = async () => {
+    if (!session?.access_token) return;
+    
     try {
-      const res = await fetch('/api/faculty/sync', { method: 'POST' });
+      const headers = { 
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json'
+      };
+
+      const res = await fetch('/api/faculty/dashboard', { headers });
       if (res.ok) {
-        setShowSyncSuccess(true);
-        // Refresh data
-        const [metricsRes, studentsRes] = await Promise.all([
-          fetch('/api/faculty/dashboard'),
-          fetch('/api/faculty/students')
-        ]);
-        if (metricsRes.ok) setMetrics((await metricsRes.json()).metrics);
-        if (studentsRes.ok) setStudents(await studentsRes.json());
-        
-        setTimeout(() => setShowSyncSuccess(false), 3000);
+        const result = await res.json();
+        setData(result);
+      }
+
+      const studentsRes = await fetch('/api/faculty/students', { headers });
+      if (studentsRes.ok) {
+        const studentsData = await studentsRes.json();
+        setStudents(studentsData);
       }
     } catch (err) {
-      console.error("Sync failed:", err);
-    } finally {
+      console.error("Failed to fetch dashboard data:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (user && user.role === 'FACULTY') {
+      fetchData();
+    }
+  }, [user]);
+
+  const handleSync = async () => {
+    console.log("🔄 Sync initiated...");
+    setSyncing(true);
+    try {
+      const res = await fetch('/api/faculty/sync', { 
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      const result = await res.json();
+      console.log("📡 Sync Response:", result);
+      
+      if (res.ok) {
+        setShowSyncSuccess(true);
+        setLastSynced(new Date().toLocaleTimeString());
+        
+        // Wait 1s for DB to settle before refreshing
+        setTimeout(async () => {
+          await fetchData();
+          setShowSyncSuccess(false);
+          setSyncing(false);
+        }, 1000);
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        console.error("❌ Sync failed with status:", res.status, errorData);
+        setSyncing(false);
+      }
+    } catch (err) {
+      console.error("❌ Sync network error:", err);
       setSyncing(false);
     }
   };
 
-  if (authLoading) return <div className="flex min-h-screen items-center justify-center bg-charcoal-blue-950 text-white">Loading Auth...</div>;
+  if (authLoading) return (
+    <div className="flex min-h-screen items-center justify-center bg-slate-50">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-12 h-12 rounded-full border-4 border-electric-sapphire-500 border-t-transparent animate-spin" />
+        <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Initializing Faculty Hub...</p>
+      </div>
+    </div>
+  );
+
   if (!user || user.role !== 'FACULTY') return null;
 
+  const { metrics, trends, completion } = data;
+
   return (
-    <div className="flex min-h-screen bg-slate-50 font-inter text-slate-900">
+    <div className="flex min-h-screen bg-slate-50 font-inter text-slate-900 selection:bg-electric-sapphire-500/30">
       <Sidebar />
       
       <div className="flex-1 flex flex-col min-h-screen ml-64 overflow-hidden">
         <main className="flex-1 p-8">
           {/* Header */}
-          <header className="mb-10 flex justify-between items-center bg-transparent border-b border-slate-200 pb-6 -mx-8 px-8 -mt-8 pt-8 sticky top-0 z-10 backdrop-blur-md">
+          <header className="mb-10 flex justify-between items-center bg-slate-50/80 border-b border-slate-200 pb-6 -mx-8 px-8 -mt-8 pt-8 sticky top-0 z-10 backdrop-blur-xl">
             <div>
-              <h1 className="text-3xl font-extrabold text-black tracking-tight mb-2">Faculty Dashboard</h1>
-              <p className="text-slate-500 font-medium">Welcome back, <span className="text-electric-sapphire-500 font-bold">Prof. {user.name?.split(' ')[1] || user.name}</span></p>
+              <div className="flex items-center gap-3 mb-1">
+                <span className="px-2.5 py-1 rounded-lg bg-[#0F62FE]/10 text-[#0F62FE] text-[10px] font-extrabold uppercase tracking-widest border border-[#0F62FE]/20">
+                  Professor Access
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Live Engine</span>
+                {lastSynced && (
+                  <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest bg-emerald-500/5 px-2 py-0.5 rounded-full border border-emerald-500/10 transition-all duration-1000">
+                    Synced {lastSynced}
+                  </span>
+                )}
+              </div>
+              <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-2">Academic Overview</h1>
+              <p className="text-slate-600 font-semibold leading-relaxed">Monitoring student performance and course engagement with AI-powered analytics</p>
             </div>
+            
             <div className="flex gap-4 items-center">
                {showSyncSuccess && (
-                 <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-xl text-sm font-bold animate-in fade-in slide-in-from-right-4 duration-500">
+                 <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-xl text-sm font-bold animate-in fade-in slide-in-from-top-4 duration-500">
                    <Check size={16} />
-                   Classroom Synced
+                   Data Synchronized
                  </div>
                )}
                <button 
                   onClick={handleSync}
                   disabled={syncing}
-                  className={`px-5 py-2.5 rounded-xl text-white font-bold text-sm shadow-lg transition-all flex items-center gap-2 hover:scale-105 active:scale-95 ${
-                    syncing ? 'bg-charcoal-blue-800 cursor-not-allowed' : 'bg-electric-sapphire-500 shadow-electric-sapphire-500/20'
+                  className={`px-6 py-3 rounded-2xl text-white font-bold text-sm shadow-xl transition-all flex items-center gap-3 hover:brightness-110 active:scale-95 ${
+                    syncing ? 'bg-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-[#0F62FE] to-[#6366F1] shadow-indigo-500/20'
                   }`}
                >
-                 <RefreshCw size={16} className={syncing ? 'animate-spin' : ''} />
-                 {syncing ? 'Syncing...' : 'Sync Classroom'}
+                 <RefreshCw size={18} className={syncing ? 'animate-spin' : ''} />
+                 {syncing ? 'Syncing...' : 'Sync Data'}
                </button>
-               <div className="w-12 h-12 rounded-xl bg-[#101827] border border-charcoal-blue-800 flex items-center justify-center text-white font-bold shadow-lg">
-                 {user.name?.charAt(0)}
+               <div className="h-12 w-[1px] bg-slate-200 mx-2" />
+               <div className="flex items-center gap-3 pl-2">
+                 <div className="text-right">
+                   <p className="text-sm font-extrabold text-black leading-none">{user.name}</p>
+                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Faculty Member</p>
+                 </div>
+                 <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-electric-sapphire-600 font-extrabold shadow-sm text-lg">
+                   {user.name?.charAt(0)}
+                 </div>
                </div>
             </div>
           </header>
 
-          <div className="max-w-[1600px] mx-auto">
+          <div className="max-w-[1640px] mx-auto">
             {/* Top Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
               <StatCard 
-                title="Total Students" 
+                title="Total Enrolled" 
                 value={metrics.totalStudents} 
                 icon={Users} 
                 trend={{ value: 12, isUp: true }} 
@@ -134,31 +192,41 @@ export default function FacultyDashboard() {
                 trend={{ value: 5, isUp: true }} 
               />
               <StatCard 
-                title="Engagement" 
-                value={`${metrics.courseEngagementScore}%`} 
+                title="Avg Performance" 
+                value={`${metrics.averageGrade}%`} 
                 icon={Flame} 
-                trend={{ value: 2, isUp: false }} 
+                trend={{ value: 2.1, isUp: true }} 
               />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-10">
-              <div className="lg:col-span-2 space-y-10">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 mb-10">
+              <div className="xl:col-span-2 space-y-10">
                 {/* Main Charts */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                  <StudentPerformanceChart />
-                  <AssignmentCompletionChart />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                  <div className="bg-white rounded-[2rem] border border-slate-200 p-1 shadow-sm overflow-hidden group hover:shadow-xl transition-all duration-500">
+                    <StudentPerformanceChart data={trends} />
+                  </div>
+                  <div className="bg-white rounded-[2rem] border border-slate-200 p-1 shadow-sm overflow-hidden group hover:shadow-xl transition-all duration-500">
+                    <AssignmentCompletionChart data={completion} />
+                  </div>
                 </div>
                 
                 {/* Prediction Table */}
-                <StudentPredictionTable students={students} />
+                <div className="bg-white rounded-[2rem] border border-slate-200 shadow-sm overflow-hidden">
+                  <StudentPredictionTable students={students} />
+                </div>
               </div>
 
               <div className="space-y-10">
                  {/* Activity Chart */}
-                 <ActivityChart />
+                 <div className="bg-white rounded-[2rem] border border-slate-200 p-1 shadow-sm">
+                   <ActivityChart />
+                 </div>
                  
                  {/* Activity Feed */}
-                 <ActivityFeed />
+                 <div className="bg-white rounded-[2rem] border border-slate-200 shadow-sm overflow-hidden">
+                   <ActivityFeed />
+                 </div>
               </div>
             </div>
           </div>

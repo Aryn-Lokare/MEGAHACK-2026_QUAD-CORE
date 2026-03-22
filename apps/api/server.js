@@ -8,12 +8,25 @@ import studentRouter from "./src/routes/student.js"
 import analyticsRouter from "./src/routes/analyticsRoutes.js"
 import aiRoutes from "./src/routes/ai.js"
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const logFile = "n:/ai-campus-management/apps/api/debug.log";
+
+const log = (msg) => {
+  const line = `${new Date().toISOString()} - ${msg}\n`;
+  fs.appendFileSync(logFile, line);
+};
+
 process.on("unhandledRejection", (reason, promise) => {
-  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+  log(`Unhandled Rejection at: ${promise} reason: ${reason}`);
 });
 
 process.on("uncaughtException", (err) => {
-  console.error("Uncaught Exception:", err);
+  log(`Uncaught Exception: ${err.message}`);
   process.exit(1);
 });
 
@@ -23,7 +36,7 @@ app.use(express.json())
 
 // Request logger
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`)
+  log(`${req.method} ${req.url}`);
   next()
 })
 
@@ -96,6 +109,13 @@ app.use("/admin", adminRouter)
 app.use("/faculty", facultyRouter)
 app.use("/student", studentRouter)
 app.use("/analytics", analyticsRouter)
+
+// Log relay for Next.js middleware (Edge Runtime)
+app.post("/log-middleware", (req, res) => {
+  const { msg } = req.body;
+  if (msg) log(msg);
+  res.sendStatus(200);
+});
 
 // Global error handler
 app.use((err, req, res, next) => {

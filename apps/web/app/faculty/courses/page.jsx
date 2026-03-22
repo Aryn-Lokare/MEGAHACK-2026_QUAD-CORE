@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function FacultyCourses() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, session, loading: authLoading } = useAuth();
   const router = useRouter();
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -26,8 +26,14 @@ export default function FacultyCourses() {
   }, [user, authLoading, router]);
 
   const fetchCourses = async () => {
+    if (!session?.access_token) return;
     try {
-      const res = await fetch('/api/faculty/courses');
+      const res = await fetch('/api/faculty/courses', {
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json'
+        }
+      });
       if (res.ok) {
         const data = await res.json();
         setCourses(data);
@@ -38,8 +44,10 @@ export default function FacultyCourses() {
   };
 
   useEffect(() => {
-    fetchCourses();
-  }, []);
+    if (session) {
+      fetchCourses();
+    }
+  }, [session]);
 
   const handleAddCourse = async (e) => {
     e.preventDefault();
@@ -47,7 +55,10 @@ export default function FacultyCourses() {
     try {
       const res = await fetch('/api/faculty/courses', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json' 
+        },
         body: JSON.stringify(newCourse)
       });
       if (res.ok) {
@@ -82,7 +93,7 @@ export default function FacultyCourses() {
             </div>
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="px-5 py-2.5 rounded-xl bg-electric-sapphire-500 text-white font-bold text-sm shadow-lg shadow-electric-sapphire-500/20 hover:scale-105 transition-transform flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#0F62FE] to-[#6366F1] text-white font-bold text-sm shadow-lg shadow-indigo-500/20 hover:scale-105 transition-transform flex items-center gap-2"
             >
               <Plus size={18} />
               Add New Course
@@ -120,7 +131,7 @@ export default function FacultyCourses() {
                 </div>
               ) : filteredCourses.map((course) => (
                 <div key={course.id} className="bg-white border border-slate-200 rounded-3xl p-8 hover:shadow-2xl hover:shadow-electric-sapphire-500/10 transition-all group cursor-pointer flex flex-col h-full">
-                  <div className="w-14 h-14 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-center text-electric-sapphire-500 mb-8 group-hover:scale-110 group-hover:bg-electric-sapphire-500 group-hover:text-white transition-all duration-300">
+                  <div className="w-14 h-14 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-center text-[#0F62FE] mb-8 group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-[#0F62FE] group-hover:to-[#6366F1] group-hover:text-white transition-all duration-300">
                     <BookOpen size={28} />
                   </div>
                   <div className="flex-1">
@@ -155,7 +166,7 @@ export default function FacultyCourses() {
           <div className="relative bg-white w-full max-w-md rounded-[2.5rem] border border-slate-200 shadow-2xl p-10 overflow-hidden animate-in zoom-in duration-300">
              <div className="flex justify-between items-center mb-8">
                 <div className="flex items-center gap-3">
-                   <div className="w-10 h-10 bg-electric-sapphire-50 rounded-xl flex items-center justify-center text-electric-sapphire-500">
+                   <div className="w-10 h-10 bg-[#0F62FE]/10 rounded-xl flex items-center justify-center text-[#0F62FE]">
                       <Plus size={20} />
                    </div>
                    <h2 className="text-2xl font-extrabold text-black tracking-tight">Add New Course</h2>

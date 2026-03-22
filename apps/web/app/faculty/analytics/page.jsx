@@ -11,9 +11,9 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function FacultyAnalytics() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, session, loading: authLoading } = useAuth();
   const router = useRouter();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     if (!authLoading && (!user || user.role !== 'FACULTY')) {
@@ -23,8 +23,14 @@ export default function FacultyAnalytics() {
 
   useEffect(() => {
     async function fetchMetrics() {
+      if (!session?.access_token) return;
       try {
-        const res = await fetch('/api/analytics/dashboard');
+        const res = await fetch('/api/faculty/dashboard', {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json'
+          }
+        });
         if (res.ok) {
           const result = await res.json();
           setData(result);
@@ -33,10 +39,10 @@ export default function FacultyAnalytics() {
         console.error("Failed to fetch analytics data:", err);
       }
     }
-    if (user && user.role === 'FACULTY') {
+    if (user && user.role === 'FACULTY' && session) {
       fetchMetrics();
     }
-  }, [user]);
+  }, [user, session]);
 
   if (authLoading) return <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-900 font-inter font-bold uppercase tracking-widest text-xs">Loading Analytics Engine...</div>;
   if (!user || user.role !== 'FACULTY') return null;

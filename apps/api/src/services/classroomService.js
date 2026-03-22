@@ -1,6 +1,9 @@
 import { google } from 'googleapis';
 import prisma from '@repo/database';
 
+
+let isSyncing = false;
+
 export class ClassroomService {
   constructor(auth) {
     this.classroom = google.classroom({ version: 'v1', auth });
@@ -130,9 +133,15 @@ export class ClassroomService {
   }
 
   async seedMockData() {
-    console.log("🌱 Generating Mock Classroom Data...");
+    if (isSyncing) {
+      console.log("⚠️ Sync already in progress, skipping...");
+      return { message: "Sync already in progress" };
+    }
+    isSyncing = true;
+    console.log("🚀 Starting Seed Process: [1/5] Initialization");
     try {
       // 1. Create/Update Course
+      console.log("📝 Upserting Course data...");
       const course = await prisma.course.upsert({
         where: { googleClassroomId: 'dummy-course-101' },
         update: { name: 'Full Stack Development', title: 'FS-502' },
@@ -145,6 +154,7 @@ export class ClassroomService {
       });
 
       // 2. Students List
+      console.log("👥 Upserting Students list [2/5]...");
       const studentsData = [
         { name: 'Alice Thompson', email: 'alice@example.edu', department: 'CS', attendance: 98 },
         { name: 'Bob Richards', email: 'bob@example.edu', department: 'CS', attendance: 65 },
@@ -174,6 +184,7 @@ export class ClassroomService {
       }
 
       // 3. Assignments
+      console.log("📚 Upserting Assignments [3/5]...");
       const assignmentsMeta = [
         { id: 'work-001', title: 'HTML & CSS Basics' },
         { id: 'work-002', title: 'JavaScript & DOM' },
@@ -199,6 +210,7 @@ export class ClassroomService {
       }
 
       // 4. Submissions
+      console.log("📤 Generating Submissions [4/5]...");
       for (const student of students) {
         for (const ass of assignments) {
           let grade, late;
@@ -232,11 +244,12 @@ export class ClassroomService {
         }
       }
 
-      // 5. Predictions (AI Powered)
+      // 5. Predictions (Parallelized for Speed)
+      console.log("🧠 Generating AI Predictions [5/5] - Parallel Mode...");
       const { PredictionService } = await import('./predictionService.js');
       const predictionService = new PredictionService();
 
-      for (const student of students) {
+      const predictionPromises = students.map(async (student) => {
           const subs = await prisma.submission.findMany({ where: { userId: student.id } });
           const grades = subs.filter(s => s.grade !== null).map(s => s.grade);
           const avg = grades.length > 0 ? grades.reduce((acc, g) => acc + g, 0) / grades.length : 0;
@@ -245,19 +258,23 @@ export class ClassroomService {
           const lateSubmissions = subs.filter(s => s.late).length;
           const lateRate = subs.length > 0 ? (lateSubmissions / subs.length) * 100 : 0;
 
-          // Call the real AI prediction service
-          await predictionService.predictStudentPerformance(student.id, {
+          return predictionService.predictStudentPerformance(student.id, {
               averageGrade: Math.round(avg),
               completionRate: Math.round(completionRate),
               lateSubmissionRate: Math.round(lateRate),
-              activityScore: 85 // Standard activity score for synced data
+              activityScore: 85
           });
-      }
+      });
 
+      await Promise.all(predictionPromises);
+
+      console.log("✅ Seed Process Complete!");
       return { course, studentCount: students.length };
     } catch (error) {
-      console.error("seedMockData failed:", error);
+      console.error("❌ seedMockData failed:", error);
       throw error;
+    } finally {
+      isSyncing = false;
     }
   }
 }

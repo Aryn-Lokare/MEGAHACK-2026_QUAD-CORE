@@ -7,7 +7,8 @@
 
 @theme inline {
   --color-electric-sapphire: #0F62FE;
-  --color-prussian-blue: #002D9C;
+  --color-indigo-600: #6366F1;
+  --color-campus-gradient: linear-gradient(135deg, #0F62FE 0%, #6366F1 100%);
   --color-slate-900: #0F172A;
   --color-slate-50: #F8FAFC;
   --color-white: #FFFFFF;
@@ -15,7 +16,7 @@
   --color-background: var(--background);
   --color-card: var(--color-white);
   --color-primary: var(--color-electric-sapphire);
-  --color-secondary: var(--color-prussian-blue);
+  --color-secondary: var(--color-indigo-600);
 
   --font-heading: var(--font-open-sans);
   --font-body: var(--font-inter);

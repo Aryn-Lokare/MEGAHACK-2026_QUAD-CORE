@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function FacultyPredictions() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, session, loading: authLoading } = useAuth();
   const router = useRouter();
   const [students, setStudents] = useState([]);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -21,8 +21,14 @@ export default function FacultyPredictions() {
 
   useEffect(() => {
     async function fetchPredictions() {
+      if (!session?.access_token) return;
       try {
-        const res = await fetch('/api/faculty/students');
+        const res = await fetch('/api/faculty/students', {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json'
+          }
+        });
         if (res.ok) {
           const data = await res.json();
           setStudents(data);
@@ -31,15 +37,40 @@ export default function FacultyPredictions() {
         console.error("Failed to fetch predictions:", err);
       }
     }
-    fetchPredictions();
-  }, []);
+    if (session) {
+      fetchPredictions();
+    }
+  }, [session]);
 
   const handleRunAnalysis = async () => {
+    if (!session?.access_token) return;
     setIsSyncing(true);
-    // Simulate re-running AI analysis
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/faculty/sync', { 
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (res.ok) {
+        // Fetch new data
+        const studentsRes = await fetch('/api/faculty/students', {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        if (studentsRes.ok) {
+          const data = await studentsRes.json();
+          setStudents(data);
+        }
+      }
+    } catch (err) {
+      console.error("Analysis refresh failed:", err);
+    } finally {
       setIsSyncing(false);
-    }, 2000);
+    }
   };
 
   if (authLoading) return <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-900 font-inter font-bold uppercase tracking-widest text-xs">Initializing AI Models...</div>;
@@ -53,7 +84,7 @@ export default function FacultyPredictions() {
           <header className="mb-10 flex justify-between items-center bg-transparent border-b border-slate-200 pb-6 -mx-8 px-8 -mt-8 pt-8 sticky top-0 z-10 backdrop-blur-md">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="text-electric-sapphire-500" size={24} />
+                <Sparkles className="text-[#0F62FE]" size={24} />
                 <h1 className="text-3xl font-extrabold text-black tracking-tight">AI Predictions</h1>
               </div>
               <p className="text-slate-500 font-medium">Predictive modeling for student performance and risk assessment</p>
@@ -61,7 +92,7 @@ export default function FacultyPredictions() {
             <button 
               onClick={handleRunAnalysis}
               disabled={isSyncing}
-              className="px-6 py-3.5 bg-electric-sapphire-500 text-white font-bold rounded-2xl shadow-lg shadow-electric-sapphire-500/20 hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest disabled:opacity-50 flex items-center gap-2"
+              className="px-6 py-3.5 bg-gradient-to-r from-[#0F62FE] to-[#6366F1] text-white font-bold rounded-2xl shadow-lg shadow-indigo-500/20 hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest disabled:opacity-50 flex items-center gap-2"
             >
               <RefreshCw size={18} className={isSyncing ? 'animate-spin' : ''} />
               {isSyncing ? 'Recalculating...' : 'Refresh AI Analysis'}
